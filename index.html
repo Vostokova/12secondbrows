@@ -7,82 +7,82 @@
 <body>
 
 <form id="calculator">
-    /* Тип строения. */
+    <h4>Тип строения.</h4>
     <div id="building">
-        <select id="building-type" name="buildingType" placeholder="Тип строения">
-            // варианты из массива "buildings"
+        <select id="building-type" name="buildingType">
+             <!--варианты из массива "buildings"-->
         </select>
         <button>Продолжить</button>
-        // По клику - показать раздел материал с массивом "house-materials"
+         <!--По клику - показать раздел материал с массивом "house-materials"-->
     </div>
 
-    /* Материал. */
+    <h4>Материал.</h4>
     <div id="material">
-        <select id="building-material" name="building-material" placeholder="Материал">
-            // варианты из массива "house-materials" или других
+        <select id="building-material" name="building-material">
+            <!--варианты из массива "house-materials" или других-->
         </select>
         <button>Продолжить</button>
-        // По клику - показать раздел этажность с массивом "floors"
+        <!--По клику - показать раздел этажность с массивом "floors"-->
     </div>
 
-    /* Этажность. */
+    <h4>Этажность.</h4>
     <div id="floors">
-        <select id="building-height" name="building-height" placeholder="Этажность">
-            // варианты из массива "floors"
+        <select id="building-height" name="building-height">
+            <!--варианты из массива "floors"-->
         </select>
         <button>Продолжить</button>
-        // По клику - показать раздел размеры строения, в переменную "шаг" записать соответствующее значение,
-        // выбрать соответствующий диаметр свай
-        // в массиве "piles" должны быть объекты {диаметр: , цена сваи: , стоимость монтажа: }
+        <!--По клику - показать раздел размеры строения, в переменную "шаг" записать соответствующее значение,-->
+        <!--выбрать соответствующий диаметр свай-->
+        <!--в массиве "piles" должны быть объекты {диаметр: , цена сваи: , стоимость монтажа: }-->
     </div>
 
-    /* Размеры строения. */
+    <h4>Размеры строения.</h4>
     <div id="dimensions">
         <input type="number" id="building-length" name="building-length">
         <input type="number" id="building-width" name="building-width">
         <button>Продолжить</button>
-        // По клику - показать инпут с расстоянием от МКАД
+        <!--По клику - показать инпут с расстоянием от МКАД-->
     </div>
 
-    /* Расстояние от МКАД. */
+    <h4>Расстояние от МКАД.</h4>
     <div id="distance">
         <input type="number" id="mrr-distance" name="mrr-distance">
         <button>Продолжить</button>
-        // По клику - показать чекбокс с обвязкой по периметру
+        <!--По клику - показать чекбокс с обвязкой по периметру-->
     </div>
 
-    /* Нужна ли обвязка свай по периметру?. */
+    <h4>Нужна ли обвязка свай по периметру?</h4>
     <div id="bracing">
         <input type="checkbox" id="need-bracing" name="need-bracing">
         <button>Продолжить</button>
-        // По клику - показать селект с массивом "girder-type" (в зависимости от материала строения), если выбран
-        // в массиве piping-material
+        <!--По клику - показать селект с массивом "girder-type" (в зависимости от материала строения), если выбран-->
+        <!--в массиве piping-material-->
     </div>
 
-    /* Материал обвязки. */
+    <h4>Материал обвязки.</h4>
     <div id="bracing-material">
         <select id="girder-type" name="girder-type">
-            // варианты из массива "girder-type"
+            <!--варианты из массива "girder-type"-->
         </select>
         <button>Продолжить</button>
-        // По клику - если материал дома не "Кирпич", показать чекбокс с обвязкой цоколя. Иначе - кнопку рассчитать.
+        <!--По клику - если материал дома не "Кирпич", показать чекбокс с обвязкой цоколя. Иначе - кнопку рассчитать.-->
     </div>
 
-    /* Нужна ли обвязка цоколя профтрубой. */
+    <h4>Нужна ли обвязка цоколя профтрубой.</h4>
     <div id="piping">
         <input type="checkbox" id="need-piping" name="need-piping">
         <button>Продолжить</button>
-        // По клику - показать селект с массивом "pipe-type", если выбран
-        // в массиве piping-material
+        <!--По клику - показать селект с массивом "pipe-type", если выбран-->
+        <!--в массиве piping-material-->
     </div>
 
-    /* Тип профилирующей трубы. */
+    <h4>Тип профилирующей трубы.</h4>
     <div id="piping-material">
         <select id="pipe-type" name="pipe-type">
-            // варианты из массива "pipe-type"
+            <!--варианты из массива "pipe-type"-->
         </select>
         <button>Продолжить</button>
-        // По клику - рассчитать.
+        <!--По клику - рассчитать.-->
     </div>
 
     <button type="submit">Рассчитать</button>

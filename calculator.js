@@ -3,198 +3,304 @@
  */
 
 /** Виды (диаметры) свай, с ценами за штуку и установку. */
-var pileTypes = [
-    {
+var pileTypes = {
+    svs108: {
         name: "СВС-108",
         price: 1650,
         setUpPrice: 1200
     },
 
-    {
+    svs133: {
         name: "СВС-133",
         price: 2300,
         setUpPrice: 1400
     }
-];
+};
 
 /** Материалы для постройки типа "Дом", с вариантами расстояния между сваями и типа свай в зависимости от этажности. */
 var houseMaterials = [
     {
-        name: "Брус 150",
-        pitch: [3, 3]
+        name: 'Брус 150',
+        value: {
+            low: {
+                pitch: 3,
+                pileType: pileTypes.svs108
+            },
+            high: {
+                pitch: 3,
+                pileType: pileTypes.svs108
+            }
+        }
     },
     {
-        name: "Брус 200",
-        pitch: [3, 2.5]
+        name: 'Брус 200',
+        value: {
+            low: {
+                pitch: 3,
+                pileType: pileTypes.svs108
+            },
+            high: {
+                pitch: 2.5,
+                pileType: pileTypes.svs108
+            }
+        }
     },
     {
-        name: "Бревно",
-        pitch: [3, 2]
+        name: 'Бревно',
+        value: {
+            low: {
+                pitch: 3,
+                pileType: pileTypes.svs108
+            },
+            high: {
+                pitch: 2,
+                pileType: pileTypes.svs108
+            }
+        }
     },
     {
-        name: "Sip-панели",
-        pitch: [3, 2.5]
+        name: 'Sip-панели',
+        value: {
+            low: {
+                pitch: 3,
+                pileType: pileTypes.svs108
+            },
+            high: {
+                pitch: 2.5,
+                pileType: pileTypes.svs108
+            }
+        }
     },
     {
-        name: "Каркасно-щитовой",
-        pitch: [3, 2.5]
+        name: 'Каркасно-щитовой',
+        value: {
+            low: {
+                pitch: 3,
+                pileType: pileTypes.svs108
+            },
+            high: {
+                pitch: 2.5,
+                pileType: pileTypes.svs108
+            }
+        }
     },
     {
-        name: "Газосиликатный блок 200 мм.",
-        pitch: [2, 2]
+        name: 'Газосиликатный блок 200 мм.',
+        value: {
+            low: {
+                pitch: 2,
+                pileType: pileTypes.svs108
+            },
+            high: {
+                pitch: 2,
+                pileType: pileTypes.svs108
+            }
+        }
     },
     {
-        name: "Газосиликатный блок 300 мм.",
-        pitch: [2, 2]
+        name: 'Газосиликатный блок 300 мм.',
+        value: {
+            low: {
+                pitch: 2,
+                pileType: pileTypes.svs108
+            },
+            high: {
+                pitch: 2,
+                pileType: pileTypes.svs133
+            }
+        }
     },
     {
-        name: "Кирпич",
-        pitch: [2, 2]
+        name: 'Кирпич',
+        value: {
+            low: {
+                pitch: 2,
+                pileType: pileTypes.svs108
+            },
+            high: {
+                pitch: 2,
+                pileType: pileTypes.svs133
+            }
+        }
     },
     {
-        name: "ЛСТК",
-        pitch: [3, 2.5]
+        name: 'ЛСТК',
+        value: {
+            low: {
+                pitch: 3,
+                pileType: pileTypes.svs108
+            },
+            high: {
+                pitch: 2.5,
+                pileType: pileTypes.svs108
+            }
+        }
     }
 ];
 
 /** Типы построек. */
 var buildings = [
-    "Дом",
-    "Баня",
-    "Веранда",
-    "Беседка",
-    "Терраса",
-    "Гараж",
-    "Хозблок / Сарай",
-    "Здание",
-    "Ангар",
-    "Пирс / Причал",
-    "Замена / Ремонт фундамента"
+    {
+        name: 'Дом',
+        value: 'house'
+    },
+    {
+        name: 'Баня',
+        value: 'baths'
+    },
+    {
+        name: 'Веранда',
+        value: 'porch'
+    },
+    {
+        name: 'Беседка',
+        value: 'arbor'
+    },
+    {
+        name: 'Терраса',
+        value: 'deck'
+    },
+    {
+        name: 'Гараж',
+        value: 'garage'
+    },
+    {
+        name: 'Хозблок / Сарай',
+        value: 'shed'
+    },
+    {
+        name: 'Здание',
+        value: 'building'
+    },
+    {
+        name: 'Ангар',
+        value: 'hangar'
+    },
+    {
+        name: 'Пирс / Причал',
+        value: 'pier'
+    },
+    {
+        name: 'Замена / Ремонт фундамента',
+        value: 'groundWorks'
+    }
 ];
 
 /** Этажность. */
 var floors = [
-    "1 - 1,5 эт.",
-    "2 - 3 эт."
+    {
+        name: '1 - 1,5 эт.',
+        value: 'low'
+    },
+    {
+        name: '2 - 3 эт.',
+        value: 'high'
+    }
 ];
 
 /** Материалы для обвязки свай по периметру, с ценами за штуку. */
 var girderTypes = [
     {
-        name: "Швеллер П16",
-        price: 1200
+        name: 'Швеллер П16',
+        value: 1200
     },
     {
-        name: "Швеллер П18",
-        price: 1350
+        name: 'Швеллер П18',
+        value: 1350
     },
     {
-        name: "Швеллер П20",
-        price: 1500
+        name: 'Швеллер П20',
+        value: 1500
     },
     {
-        name: "Швеллер П22",
-        price: 1600
+        name: 'Швеллер П22',
+        value: 1600
     },
     {
-        name: "Швеллер П26",
-        price: 2100
+        name: 'Швеллер П26',
+        value: 2100
     },
     {
-        name: "Швеллер П28",
-        price: 2300
+        name: 'Швеллер П28',
+        value: 2300
     },
     {
-        name: "Швеллер П30",
-        price: 2700
+        name: 'Швеллер П30',
+        value: 2700
     },
     {
-        name: "Двутавр 16",
-        price: 1650
+        name: 'Двутавр 16',
+        value: 1650
     },
     {
-        name: "Двутавр 18",
-        price: 1900
+        name: 'Двутавр 18',
+        value: 1900
     },
     {
-        name: "Двутавр 20",
-        price: 2300
+        name: 'Двутавр 20',
+        value: 2300
     },
     {
-        name: "Двутавр 22",
-        price: 2550
+        name: 'Двутавр 22',
+        value: 2550
     }
 ];
 
 /** Материалы для обвязки цоколя профтрубой, с ценами за штуку. */
 var pipeTypes = [
     {
-        name: "Профтруба 20х30х2",
-        price: 1200
+        name: 'Профтруба 20х30х2',
+        value: 1200
     },
     {
-        name: "Профтруба 20х30х3",
-        price: 1350
+        name: 'Профтруба 20х30х3',
+        value: 1350
     },
     {
-        name: "Профтруба 30х60х2",
-        price: 1500
+        name: 'Профтруба 30х60х2',
+        value: 1500
     },
     {
-        name: "Профтруба 30х60х3",
-        price: 1600
+        name: 'Профтруба 30х60х3',
+        value: 1600
     }
 ];
 
-/** Материалы для обвязки свай кирпичного дома, с ценами за материал и установку. */
+/** Материалы для обвязки свай кирпичного дома, с ценами за материал и установку.
+ * @value [0,4*04] Ширина и высота ленты.
+ */
 var bricksBuildingBracing = [
     {
-        name: "Лента 40х40",
-        size: 0.4*0.4,
-        price: 20000,
-        bracing: 25000
+        name: 'Лента 40х40',
+        value: 0.4*0.4
     },
     {
-        name: "Лента 40х60",
-        size: 0.4*0.6,
-        price: 20000,
-        bracing: 25000
+        name: 'Лента 40х60',
+        value: 0.4*0.6
     },
     {
-        name: "Лента 40х80",
-        size: 0.4*0.8,
-        price: 20000,
-        bracing: 25000
+        name: 'Лента 40х80',
+        value: 0.4*0.8
     },
     {
-        name: "Лента 40х100",
-        size: 0.4*1,
-        price: 20000,
-        bracing: 25000
+        name: 'Лента 40х100',
+        value: 0.4*1
     },
     {
-        name: "Лента 50х50",
-        size: 0.5*0.5,
-        price: 20000,
-        bracing: 25000
+        name: 'Лента 50х50',
+        value: 0.5*0.5
     },
     {
-        name: "Лента 50х60",
-        size: 0.5*0.6,
-        price: 20000,
-        bracing: 25000
+        name: 'Лента 50х60',
+        value: 0.5*0.6
     },
     {
-        name: "Лента 50х80",
-        size: 0.5*0.8,
-        price: 20000,
-        bracing: 25000
+        name: 'Лента 50х80',
+        value: 0.5*0.8
     },
     {
-        name: "Лента 50х100",
-        size: 0.5*1,
-        price: 20000,
-        bracing: 25000
+        name: 'Лента 50х100',
+        value: 0.5*1
     }
 ];
 
@@ -206,9 +312,14 @@ var bricksBuildingBracing = [
 /** Цена доставки (за километр). */
 var transportationTax = 40;
 
-/** Цена за монтаж обвязки (за штуку). */
+/** Цена за обвязку свай/цоколя (за штуку материала). */
 var bracing = 1000;
 var piping = 1000;
+
+/** Цена ленты для обвязки кирпичного строения (за квадратный метр ленты). */
+var bricksBuildingBinderPrice = 20000;
+/** Цена обвязки кирпичного строения (за квадратный метр ленты). */
+var bricksBuildingBracingPrice = 25000;
 
 
 /**
@@ -221,8 +332,9 @@ var piping = 1000;
  */
 function setOptions(selectID, array) {
     array.map(function(item) {
-        var option = document.createElement("option");
-        option.innerHTML = item.name ? item.name : item;
+        var option = document.createElement('option');
+        option.innerHTML = item.name;
+        option.value = item.value;
         byId(selectID).appendChild(option);
     })
 }
@@ -232,9 +344,11 @@ function byId(id) {
     return document.getElementById(id);
 }
 
-/** Получение индекса выбранной select-опции по идентификатору селекта. */
+/** Получение значения выбранной select-опции по идентификатору селекта. */
 function selected(id) {
-    return byId(id).selectedIndex;
+    var dropdown = byId(id);
+    var option = dropdown.selectedIndex;
+    return dropdown.options[option].value;
 }
 
 /** Получение float-значения введенного числа по идентификатору инпута. */
@@ -246,106 +360,88 @@ function getNumberValue(id) {
  * @param pitch Максимальное расстояние между сваями.
  */
 function calcPiles(pitch) {
-    var length = getNumberValue("building-length");
-    var width = getNumberValue("building-width");
-    pitch = pitch ? pitch : 3;
+    var length = getNumberValue('building-length');
+    var width = getNumberValue('building-width');
 
     /** Расчёт количества свай по одной стороне.
      * @param value Размер стороны (длина или ширина строения).
-     * Прибавляем 1, т.к. в "точке отсчёта" тоже должна быть свая, значит счёт идёт не от 0.
+     * Прибавляем 1, т.к. в 'точке отсчёта' тоже должна быть свая, значит счёт идёт не от 0.
      */
     function calcAspect(value) {
         var pilesNumber = Math.ceil(value / pitch) + 1;
-        console.log("calcAspect " + pilesNumber);
+        console.log('calcAspect ' + pilesNumber);
         return pilesNumber;
     }
-    var totalPiles = calcAspect(length) * calcAspect(width);
-    console.log("totalPiles " + totalPiles);
 
-    return totalPiles;
+    return calcAspect(length) * calcAspect(width);
 }
 
 /** Расчёт стоимости транспортировки. */
 function calcTransportation() {
-    var tax = getNumberValue("mrr-distance") * transportationTax;
-    console.log("transportationTax " + tax);
-    return tax;
+    return getNumberValue('mrr-distance') * transportationTax;
 }
 
 /** Расчёт стоимости свай. */
 function getPilesAmount() {
-    var material = houseMaterials[selected("building-material")];
-    var height = selected("building-height");
-    var pitch = material.pitch[height];
-    var pileType = pileTypes[height];
+    var buildingParams = selected('building-material');
+    var height = selected('building-height');
+    var pitch = buildingParams[height].pitch;
+    var pileType = buildingParams[height].pileType;
 
-    var pilesAmount = calcPiles(pitch) * (pileType.price + pileType.setUpPrice);
-    console.log("pilesAmount " + pilesAmount);
-
-    return pilesAmount;
+    return calcPiles(pitch) * (pileType.price + pileType.setUpPrice);
 }
 
 /** Расчёт стоимости дополнительных работ (обвязка свай / обвязка по периметру). */
 function getAdditionalWorksAmount() {
-    var length = getNumberValue("building-length");
-    var width = getNumberValue("building-width");
+    var length = getNumberValue('building-length');
+    var width = getNumberValue('building-width');
     var perimeter = (length + width) * 2;
     var pieces = Math.ceil(perimeter / 3);
     var bracingAmount = 0, pipingAmount = 0;
-    var girderType;
 
 
-    if (byId("need-bracing").checked) {
+    if (byId('need-bracing').checked) {
 
         /** Для кирпичного строения предоставляется только обвязка лентой - другой способ расчёта. */
-        if (houseMaterials[selected("building-material")].name === "Кирпич") {
-           girderType = bricksBuildingBracing[selected("girder-type")];
-           bracingAmount = (girderType.price + girderType.bracing) * perimeter * girderType.size;
-           console.log("bricks bracing amount " + bracingAmount);
+        if (houseMaterials[selected('building-material')].name === 'Кирпич') { //TODO: достать значение "кирпич" или что выбор из массива bricksBuildingBracing
+           var binderSize = selected('girder-type');
 
-           return bracingAmount;
+           return (bricksBuildingBinderPrice + bricksBuildingBracingPrice) * perimeter * binderSize;
 
        } else {
-           girderType =  girderTypes[selected("girder-type")];
-           bracingAmount = (girderType.price + bracing) * pieces;
-           console.log("bracingAmount " + bracingAmount);
+           var girderPrice = selected('girder-type');
+           bracingAmount = (girderPrice + bracing) * pieces;
        }
     }
 
-    if (byId("need-piping").checked) {
-        var pipeType =  pipeTypes[selected("pipe-type")];
-        pipingAmount = (pipeType.price + piping) * pieces;
-        console.log("pipingAmount " + pipingAmount);
+    if (byId('need-piping').checked) {
+        var pipePrice = selected('pipe-type');
+        pipingAmount = (pipePrice + piping) * pieces;
     }
 
-    var  additionalWorks = bracingAmount + pipingAmount;
-    console.log("additionalWorks " + additionalWorks);
-
-    return additionalWorks;
+    return bracingAmount + pipingAmount;
 }
 
 /** Получение общей стоимости заказа. */
 function getTotal(event) {
     event.preventDefault();
-    var h3 = document.createElement("h3");
+    var h3 = document.createElement('h3');
     var total = getPilesAmount() + getAdditionalWorksAmount() + calcTransportation();
-    console.log(total);
-    h3.innerHTML = "Сумма: " + total;
-    console.log(h3.innerHTML);
+    h3.innerHTML = 'Сумма: ' + total;
 
-    byId("calculator").appendChild(h3);
+    byId('calculator').appendChild(h3);
 }
 
 function setInitial() {
-    setOptions("building-type", buildings);
-    setOptions("building-material", houseMaterials);
-    setOptions("building-height", floors);
-    setOptions("girder-type", girderTypes);
-    setOptions("pipe-type", pipeTypes);
+    setOptions('building-type', buildings);
+    setOptions('building-material', houseMaterials);
+    setOptions('building-height', floors);
+    setOptions('girder-type', girderTypes);
+    setOptions('pipe-type', pipeTypes);
 }
 
-document.addEventListener("DOMContentLoaded", setInitial);
-byId("calculator").addEventListener("submit", getTotal);
+document.addEventListener('DOMContentLoaded', setInitial);
+byId('calculator').addEventListener('submit', getTotal);
 
 // function showNext(event, nextBlockId) {
 //     event.target.hidden = true;
