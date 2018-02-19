@@ -2,249 +2,239 @@
  * Константы для select-опций
  */
 
-/** Виды (диаметры) свай, с ценами за штуку и установку. */
-var pileTypes = {
-    svs108: {
-        name: "СВС-108",
-        price: 1650,
-        setUpPrice: 1200
-    },
+ /** Типы построек. */
+ var BUILDINGS = [
+     {name: 'Дом', value: 'house'},
+     {name: 'Баня', value: 'bath'},
+     {name: 'Веранда', value: 'porch'},
+     {name: 'Беседка', value: 'arbor'},
+     {name: 'Терраса', value: 'decking'},
+     {name: 'Гараж', value: 'garage'},
+     {name: 'Хозблок / Сарай', value: 'shed'},
+     {name: 'Здание', value: 'building'},
+     {name: 'Ангар', value: 'barn'},
+     {name: 'Пирс / Причал', value: 'pier'},
+     {name: 'Замена / Ремонт фундамента', value: 'groundWorks'}
+ ];
 
-    svs133: {
-        name: "СВС-133",
-        price: 2300,
-        setUpPrice: 1400
+/** Материалы для большинства видов построек. */
+var ALLMATERIALS = [MT.bar150, MT.bar200, MT.woodLog, MT.sip, MT.framePanel, MT.cinder200, MT.cinder300, MT.brick, MT.steel];
+
+/** Материалы для постройки типа "Беседка". */
+var ARBORMATERIALS = [MT.bar150, MT.bar200, MT.woodLog, MT.sip, MT.framePanel, MT.cinder200, MT.steel];
+
+/** Варианты строения для постройки типа "Ангар". */
+var BARNOPTIONS = [
+    {name: 'Арочный', value: archBarnParams,
+    {name: 'Односкатный', value: leanBarnParams}
+];
+
+function handleBuildingTypeSelect (buildingType) {
+    switch (buildingType) {
+        case 'house':
+        case 'bath':
+        case 'porch':
+        case 'arbor':
+        case 'decking':
+        case 'garage':
+        case 'shed':
+        case 'building':
+            setOptions('building-material', ALLMATERIALS, 'Материал');
+            break;
+        case: 'arbor':
+            setOptions('building-material', ARBORMATERIALS, 'Материал');
+            break;
+        case 'barn':
+            // показать поле для выбора формы ангара с вариантами BARNOPTIONS
+            // break;
+        case 'pier':
+            // показать инпуты для ввода длины и ширины
+            // break;
+        case 'groundworks':
+            // показать что-то для замены/ремонта
+            // break;
+        default:
+            byId('calculator').disabled = true;
     }
+}
+
+function handleBuildingMaterialSelect (material) {
+    switch (material) {
+        case 'house':
+        case 'bath':
+        case 'porch':
+        case 'arbor':
+        case 'decking':
+        case 'garage':
+        case 'shed':
+        case 'building':
+            setOptions('building-material', ALLMATERIALS, 'Материал');
+            break;
+        case: 'arbor':
+            setOptions('building-material', ARBORMATERIALS, 'Материал');
+            break;
+        case 'barn':
+            // показать поле для выбора формы ангара с вариантами BARNOPTIONS
+            // break;
+        case 'pier':
+            // показать инпуты для ввода длины и ширины
+            // break;
+        case 'groundworks':
+            // показать что-то для замены/ремонта
+            // break;
+        default:
+            byId('calculator').disabled = true;
+    }
+}
+
+// /** Материалы для постройки типа "Дом", с параметрами расстояния между сваями, типа свай и вариантов обвязки. */
+// var HOUSEMATERIALS = [
+//     {name: 'Брус 150', value: bar150Params},
+//     {name: 'Брус 200', value: bar200Params},
+//     {name: 'Бревно', value: logParams},
+//     {name: 'Sip-панели', value: panelParams},
+//     {name: 'Каркасно-щитовой', value: panelParams},
+//     {name: 'Газосиликатный блок 200 мм.', value: cinder200Params},
+//     {name: 'Газосиликатный блок 300 мм.', value: cinder300Params},
+//     {name: 'Кирпич', value: brickParams},
+//     {name: 'ЛСТК', value: panelParams}
+// ];
+//
+// /** Материалы для постройки типа "Баня", с указанием расстояния между сваями, типа свай и вариантов обвязки свай. */
+// var BATHMATERIALS = [
+//   {name: 'Брус 150', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes16}},
+//   {name: 'Брус 200', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes20}},
+//   {name: 'Бревно', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes20}},
+//   {name: 'Sip-панели', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes14}},
+//   {name: 'Каркасно-щитовой', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes14}},
+//   {name: 'Газосиликатный блок 200 мм.', value: {pitch: 2, pileType: PT.svs108, girderTypes: girderTypes20}},
+//   {name: 'Газосиликатный блок 300 мм.', value: {pitch: 2, pileType: PT.svs108, girderTypes: girderTypes30}},
+//   {name: 'Кирпич', value: {pitch: 2, pileType: PT.svs108, girderTypes: bricksBuildingBracing}},
+//   {name: 'ЛСТК', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes14}}
+// ];
+//
+// /** Материалы для постройки типа "Веранда", с указанием расстояния между сваями, типа свай и вариантов обвязки свай. */
+// var PORCHMATERIALS = [
+//   {name: 'Брус 150', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes16}},
+//   {name: 'Брус 200', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes20}},
+//   {name: 'Бревно', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes20}},
+//   {name: 'Sip-панели', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}},
+//   {name: 'Каркасно-щитовой', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}},
+//   {name: 'Газосиликатный блок 200 мм.', value: {pitch: 2, pileType: PT.svs89, girderTypes: girderTypes20}},
+//   {name: 'Газосиликатный блок 300 мм.', value: {pitch: 2, pileType: PT.svs108, girderTypes: girderTypes30}},
+//   {name: 'Кирпич', value: {pitch: 2, pileType: PT.svs108, girderTypes: bricksBuildingBracing}},
+//   {name: 'ЛСТК', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}}
+// ];
+//
+// /** Материалы для постройки типа "Беседка", с указанием расстояния между сваями, типа свай и вариантов обвязки свай. */
+// var ARBORMATERIALS = [
+//   {name: 'Брус 150', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes16}},
+//   {name: 'Брус 200', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes20}},
+//   {name: 'Бревно', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes20}},
+//   {name: 'Sip-панели', value: {pitch: 3, pileType: PT.svs76, girderTypes: girderTypes14}},
+//   {name: 'Каркасно-щитовой', value: {pitch: 3, pileType: PT.svs76, girderTypes: girderTypes14}},
+//   {name: 'Газосиликатный блок 200 мм.', value: {pitch: 2, pileType: PT.svs108, girderTypes: girderTypes20}},
+//   {name: 'ЛСТК', value: {pitch: 3, pileType: PT.svs76, girderTypes: girderTypes14}}
+// ];
+//
+// /** Материалы для постройки типа "Терраса", с указанием расстояния между сваями, типа свай и вариантов обвязки свай. */
+// var DECKINGMATERIALS = [
+//   {name: 'Брус 150', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes16}},
+//   {name: 'Брус 200', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes20}},
+//   {name: 'Бревно', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes20}},
+//   {name: 'Sip-панели', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}},
+//   {name: 'Каркасно-щитовой', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}},
+//   {name: 'Газосиликатный блок 200 мм.', value: {pitch: 2, pileType: PT.svs89, girderTypes: girderTypes20}},
+//   {name: 'Газосиликатный блок 300 мм.', value: {pitch: 2, pileType: PT.svs108, girderTypes: girderTypes30}},
+//   {name: 'Кирпич', value: {pitch: 2, pileType: PT.svs108, girderTypes: bricksBuildingBracing}},
+//   {name: 'ЛСТК', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}}
+// ];
+//
+// /** Материалы для постройки типа "Гараж", с указанием расстояния между сваями, типа свай и вариантов обвязки свай. */
+// var GARAGEMATERIALS = [
+//   {name: 'Брус 150', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes16}},
+//   {name: 'Брус 200', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes20}},
+//   {name: 'Бревно', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes20}},
+//   {name: 'Sip-панели', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes14}},
+//   {name: 'Каркасно-щитовой', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes14}},
+//   {name: 'Газосиликатный блок 200 мм.', value: {pitch: 2, pileType: PT.svs108, girderTypes: girderTypes20}},
+//   {name: 'Газосиликатный блок 300 мм.', value: {pitch: 2, pileType: PT.svs108, girderTypes: girderTypes30}},
+//   {name: 'Кирпич', value: {pitch: 2, pileType: PT.svs108, girderTypes: bricksBuildingBracing}},
+//   {name: 'ЛСТК', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes14}}
+// ];
+//
+// /** Материалы для постройки типа "Хозблок/Сарай", с указанием расстояния между сваями, типа свай и вариантов обвязки свай. */
+// var SHEDMATERIALS = [
+  {name: 'Брус 150', value: {pitch: 3, pileType: PT.svs76, girderTypes: girderTypes16}},
+  {name: 'Брус 200', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes20}},
+  {name: 'Бревно', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes20}},
+  {name: 'Sip-панели', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}},
+  {name: 'Каркасно-щитовой', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}},
+  {name: 'Газосиликатный блок 200 мм.', value: {pitch: 2, pileType: PT.svs108, girderTypes: girderTypes20}},
+  {name: 'Газосиликатный блок 300 мм.', value: {pitch: 2, pileType: PT.svs108, girderTypes: girderTypes30}},
+  {name: 'Кирпич', value: {pitch: 2, pileType: PT.svs108, girderTypes: bricksBuildingBracing}},
+  {name: 'ЛСТК', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}}
+];
+
+/** Materials - Виды материалов для всех типов строений */
+var MT = {
+    bar150: {name: 'Брус 150', value: 'bar150'},
+    bar200: {name: 'Брус 200', value: 'bar200'},
+    woodLog: {name: 'Бревно', value: 'woodLog'},
+    sip: {name: 'Sip-панели', value: 'sip'},
+    framePanel: {name: 'Каркасно-щитовой', value: 'framePanel'},
+    cinder200: {name: 'Газосиликатный блок 200 мм.', value: 'cinder200'},
+    cinder300: {name: 'Газосиликатный блок 300 мм.', value: 'cinder300'},
+    brick: {name: 'Кирпич', value: 'brick'},
+    steel: {name: 'ЛСТК', value: 'steel'}
+}
+
+/** Pile Types - Виды (диаметры) свай, с ценами за штуку и установку. */
+var PT = {
+    svs108: {name: 'СВС-108', price: 1650, setUpPrice: 1200},
+    svs133: {name: 'СВС-133', price: 2300, setUpPrice: 1400},
+    svs89: {name: 'СВС-89', price: 1450, setUpPrice: 1100},
+    svs76: {name: 'СВС-76', price: 1250, setUpPrice: 950},
+    svs108m4: {name: 'СВС-76', price: 2500, setUpPrice: 1500},
+    svs108m4l2: {name: 'СВС-76', price: 3500, setUpPrice: 2500},
+    svs108m5l2: {name: 'СВС-76', price: 4200, setUpPrice: 2900}
 };
 
-/** Материалы для постройки типа "Дом", с вариантами расстояния между сваями и типа свай в зависимости от этажности. */
-var houseMaterials = [
-    {
-        name: 'Брус 150',
-        value: {
-            low: {
-                pitch: 3,
-                pileType: pileTypes.svs108
-            },
-            high: {
-                pitch: 3,
-                pileType: pileTypes.svs108
-            }
-        }
-    },
-    {
-        name: 'Брус 200',
-        value: {
-            low: {
-                pitch: 3,
-                pileType: pileTypes.svs108
-            },
-            high: {
-                pitch: 2.5,
-                pileType: pileTypes.svs108
-            }
-        }
-    },
-    {
-        name: 'Бревно',
-        value: {
-            low: {
-                pitch: 3,
-                pileType: pileTypes.svs108
-            },
-            high: {
-                pitch: 2,
-                pileType: pileTypes.svs108
-            }
-        }
-    },
-    {
-        name: 'Sip-панели',
-        value: {
-            low: {
-                pitch: 3,
-                pileType: pileTypes.svs108
-            },
-            high: {
-                pitch: 2.5,
-                pileType: pileTypes.svs108
-            }
-        }
-    },
-    {
-        name: 'Каркасно-щитовой',
-        value: {
-            low: {
-                pitch: 3,
-                pileType: pileTypes.svs108
-            },
-            high: {
-                pitch: 2.5,
-                pileType: pileTypes.svs108
-            }
-        }
-    },
-    {
-        name: 'Газосиликатный блок 200 мм.',
-        value: {
-            low: {
-                pitch: 2,
-                pileType: pileTypes.svs108
-            },
-            high: {
-                pitch: 2,
-                pileType: pileTypes.svs108
-            }
-        }
-    },
-    {
-        name: 'Газосиликатный блок 300 мм.',
-        value: {
-            low: {
-                pitch: 2,
-                pileType: pileTypes.svs108
-            },
-            high: {
-                pitch: 2,
-                pileType: pileTypes.svs133
-            }
-        }
-    },
-    {
-        name: 'Кирпич',
-        value: {
-            low: {
-                pitch: 2,
-                pileType: pileTypes.svs108
-            },
-            high: {
-                pitch: 2,
-                pileType: pileTypes.svs133
-            }
-        }
-    },
-    {
-        name: 'ЛСТК',
-        value: {
-            low: {
-                pitch: 3,
-                pileType: pileTypes.svs108
-            },
-            high: {
-                pitch: 2.5,
-                pileType: pileTypes.svs108
-            }
-        }
-    }
-];
-
-/** Типы построек. */
-var buildings = [
-    {
-        name: 'Дом',
-        value: 'house'
-    },
-    {
-        name: 'Баня',
-        value: 'baths'
-    },
-    {
-        name: 'Веранда',
-        value: 'porch'
-    },
-    {
-        name: 'Беседка',
-        value: 'arbor'
-    },
-    {
-        name: 'Терраса',
-        value: 'deck'
-    },
-    {
-        name: 'Гараж',
-        value: 'garage'
-    },
-    {
-        name: 'Хозблок / Сарай',
-        value: 'shed'
-    },
-    {
-        name: 'Здание',
-        value: 'building'
-    },
-    {
-        name: 'Ангар',
-        value: 'hangar'
-    },
-    {
-        name: 'Пирс / Причал',
-        value: 'pier'
-    },
-    {
-        name: 'Замена / Ремонт фундамента',
-        value: 'groundWorks'
-    }
-];
-
 /** Этажность. */
-var floors = [
-    {
-        name: '1 - 1,5 эт.',
-        value: 'low'
-    },
-    {
-        name: '2 - 3 эт.',
-        value: 'high'
-    }
+var FLOORS = [
+    {name: '1 - 1,5 эт.', value: 'low'},
+    {name: '2 - 3 эт.', value: 'high'}
 ];
 
-/** Материалы для обвязки свай по периметру, с ценами за штуку. */
-var girderTypes = [
-    {
-        name: 'Швеллер П16',
-        value: 1200
-    },
-    {
-        name: 'Швеллер П18',
-        value: 1350
-    },
-    {
-        name: 'Швеллер П20',
-        value: 1500
-    },
-    {
-        name: 'Швеллер П22',
-        value: 1600
-    },
-    {
-        name: 'Швеллер П26',
-        value: 2100
-    },
-    {
-        name: 'Швеллер П28',
-        value: 2300
-    },
-    {
-        name: 'Швеллер П30',
-        value: 2700
-    },
-    {
-        name: 'Двутавр 16',
-        value: 1650
-    },
-    {
-        name: 'Двутавр 18',
-        value: 1900
-    },
-    {
-        name: 'Двутавр 20',
-        value: 2300
-    },
-    {
-        name: 'Двутавр 22',
-        value: 2550
-    }
+/** Варианты высоты для ангара. */
+var BARNHEIGHT = [
+    {name: 'до 6 м.', value: 'under6'},
+    {name: 'до 8 м.', value: 'under8'},
+    {name: 'до 10 м.', value: 'under10'},
+    {name: 'более 10 м.', value: 'over10'}
 ];
+
+var BARNBRACING = [
+    {name: 'обвязка металлом', value: 'metal'},
+    {name: 'обвязка бетонной лентой', value: 'band'}
+];
+
+/** Girder Types - Материалы для обвязки свай по периметру, с ценами за штуку. */
+var GT = {
+    U16: {name: 'Швеллер П16', value: 1200},
+    U18: {name: 'Швеллер П18', value: 1350},
+    U20: {name: 'Швеллер П20', value: 1500},
+    U22: {name: 'Швеллер П22', value: 1600},
+    U24: {name: 'Швеллер П24', value: 1800},
+    U26: {name: 'Швеллер П26', value: 2100},
+    U28: {name: 'Швеллер П28', value: 2300},
+    U30: {name: 'Швеллер П30', value: 2700},
+    T14: {name: 'Двутавр 14', value: 1450},
+    T16: {name: 'Двутавр 16', value: 1650},
+    T18: {name: 'Двутавр 18', value: 1900},
+    T20: {name: 'Двутавр 20', value: 2300},
+    T22: {name: 'Двутавр 22', value: 2550}
+};
 
 /** Материалы для обвязки цоколя профтрубой, с ценами за штуку. */
 var pipeTypes = [
@@ -304,6 +294,65 @@ var bricksBuildingBracing = [
     }
 ];
 
+var bar150Params = {
+    low: {pitch: 3, pileType: PT.svs108},
+    high: {pitch: 2, pileType: PT.svs108},
+    girderTypes: girderTypes16
+}
+
+var bar200Params = {
+    low: {pitch: 3, pileType: PT.svs108},
+    high: {pitch: 2.5, pileType: PT.svs108},
+    girderTypes: girderTypes20
+}
+
+var logParams = {
+    low: {pitch: 3, pileType: PT.svs108},
+    high: {pitch: 2, pileType: PT.svs108},
+    girderTypes: girderTypes20
+}
+
+var panelParams = {
+    low: {pitch: 3, pileType: PT.svs108},
+    high: {pitch: 2.5, pileType: PT.svs108},
+    girderTypes: girderTypes14
+}
+
+var cinder200Params = {
+    low: {pitch: 2, pileType: PT.svs108},
+    high: {pitch: 2, pileType: PT.svs108},
+    girderTypes: girderTypes20
+}
+
+var cinder300Params = {
+    low: {pitch: 2, pileType: PT.svs108},
+    high: {pitch: 2, pileType: PT.svs133},
+    girderTypes: girderTypes30
+}
+
+var brickParams = {
+    low: {pitch: 2, pileType: PT.svs108},
+    high: {pitch: 2, pileType: PT.svs133},
+    girderTypes: bricksBuildingBracing
+}
+
+var archBarnParams = {
+  pileType: {under6: PT.svs108m4, under8: PT.svs108m4l2, under10: PT.svs108m5l2, over10: PT.svs108m5l2}
+  girderTypes: girderTypes16,
+  pitch: 3
+}
+
+var leanBarnParams = {
+  pileType: {under6: PT.svs108m4l2, under8: PT.svs108m4l2, under10: PT.svs108m5l2, over10: PT.svs108m5l2}
+  girderTypes: {metal: girderTypes16, band: bricksBuildingBracing},
+  pitch: 3
+}
+
+var girderTypes14 = [GT.U16, GT.U18, GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T14, GT.T16, GT.T18, GT.T20, GT.T22];
+var girderTypes16 = [GT.U16, GT.U18, GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T16, GT.T18, GT.T20, GT.T22];
+var girderTypes20 = [GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T20, GT.T22];
+var girderTypes30 = [GT.U30];
+
 
 /**
  * Константы для формул.
@@ -326,18 +375,28 @@ var bricksBuildingBracingPrice = 25000;
  * Формулы и функции.
  */
 
-/** Заполнение select-списка опциями.
- * @param selectID Идентификатор списка.
- * @param array Массив с опциями для заполнения.
- */
-function setOptions(selectID, array) {
-    array.map(function(item) {
-        var option = document.createElement('option');
-        option.innerHTML = item.name;
-        option.value = item.value;
-        byId(selectID).appendChild(option);
-    })
-}
+ /** Заполнение select-списка опциями.
+  * @param selectID Идентификатор списка.
+  * @param array Массив с опциями для заполнения.
+  * @param [placeholder] Необязательная подсказка/заголовок выпадающего списка.
+  */
+ function setOptions(selectID, array, placeholder) {
+ 	var select = byId(selectID);
+ 	while (select.options.length > 0) {
+ 		select.options[0] = null;
+ 	};
+
+ 	if (placeholder) {
+ 		var defaultOption = new Option (placeholder, '', true, true);
+ 		defaultOption.disabled = true;
+ 		select.appendChild (defaultOption);
+ 	}
+
+     array.map(function(item) {
+         var option = new Option (item.name, item.value);
+         select.appendChild(option);
+     })
+ }
 
 /** Получение HTML-элемента по идентификатору. */
 function byId(id) {
@@ -433,9 +492,9 @@ function getTotal(event) {
 }
 
 function setInitial() {
-    setOptions('building-type', buildings);
-    setOptions('building-material', houseMaterials);
-    setOptions('building-height', floors);
+    setOptions('building-type', buildings, 'Тип строения');
+    setOptions('building-material', houseMaterials, 'Материал');
+    setOptions('building-height', floors, 'Этажность');
     setOptions('girder-type', girderTypes);
     setOptions('pipe-type', pipeTypes);
 }
@@ -449,4 +508,3 @@ byId('calculator').addEventListener('submit', getTotal);
 //     var nextBlock = byId(nextBlockId);
 //     // в опции передать нужный массив
 // }
-
