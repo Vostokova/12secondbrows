@@ -1,56 +1,24 @@
-/**
- * Константы для select-опций
- */
-
- /** Типы построек. */
- var BUILDINGS = [
-     {name: 'Дом', value: 'house'},
-     {name: 'Баня', value: 'bath'},
-     {name: 'Веранда', value: 'porch'},
-     {name: 'Беседка', value: 'arbor'},
-     {name: 'Терраса', value: 'decking'},
-     {name: 'Гараж', value: 'garage'},
-     {name: 'Хозблок / Сарай', value: 'shed'},
-     {name: 'Здание', value: 'building'},
-     {name: 'Ангар', value: 'barn'},
-     {name: 'Пирс / Причал', value: 'pier'},
-     {name: 'Замена / Ремонт фундамента', value: 'groundWorks'}
- ];
-
-/** Материалы для большинства видов построек. */
-var ALLMATERIALS = [MT.bar150, MT.bar200, MT.woodLog, MT.sip, MT.framePanel, MT.cinder200, MT.cinder300, MT.brick, MT.steel];
-
-/** Материалы для постройки типа "Беседка". */
-var ARBORMATERIALS = [MT.bar150, MT.bar200, MT.woodLog, MT.sip, MT.framePanel, MT.cinder200, MT.steel];
-
-/** Варианты строения для постройки типа "Ангар". */
-var BARNOPTIONS = [
-    {name: 'Арочный', value: archBarnParams,
-    {name: 'Односкатный', value: leanBarnParams}
-];
-
 function handleBuildingTypeSelect (buildingType) {
     switch (buildingType) {
         case 'house':
         case 'bath':
         case 'porch':
-        case 'arbor':
         case 'decking':
         case 'garage':
         case 'shed':
         case 'building':
             setOptions('building-material', ALLMATERIALS, 'Материал');
             break;
-        case: 'arbor':
+        case 'arbor':
             setOptions('building-material', ARBORMATERIALS, 'Материал');
             break;
-        case 'barn':
+        // case 'barn':
             // показать поле для выбора формы ангара с вариантами BARNOPTIONS
             // break;
-        case 'pier':
+        // case 'pier':
             // показать инпуты для ввода длины и ширины
             // break;
-        case 'groundworks':
+        // case 'groundworks':
             // показать что-то для замены/ремонта
             // break;
         default:
@@ -60,20 +28,15 @@ function handleBuildingTypeSelect (buildingType) {
 
 function handleBuildingMaterialSelect (material) {
     switch (material) {
-        case 'house':
-        case 'bath':
-        case 'porch':
-        case 'arbor':
-        case 'decking':
-        case 'garage':
-        case 'shed':
-        case 'building':
-            setOptions('building-material', ALLMATERIALS, 'Материал');
-            break;
-        case: 'arbor':
-            setOptions('building-material', ARBORMATERIALS, 'Материал');
-            break;
-        case 'barn':
+        case 'bar150':
+        case 'bar200':
+        case 'woodLog':
+        case 'sip':
+        case 'framePanel':
+        case 'cinder200':
+        case 'cinder300':
+        case 'brick':
+        case 'steel':
             // показать поле для выбора формы ангара с вариантами BARNOPTIONS
             // break;
         case 'pier':
@@ -163,8 +126,8 @@ function handleBuildingMaterialSelect (material) {
 //   {name: 'ЛСТК', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes14}}
 // ];
 //
-// /** Материалы для постройки типа "Хозблок/Сарай", с указанием расстояния между сваями, типа свай и вариантов обвязки свай. */
-// var SHEDMATERIALS = [
+/** Материалы для постройки типа "Хозблок/Сарай", с указанием расстояния между сваями, типа свай и вариантов обвязки свай. */
+var SHEDMATERIALS = [
   {name: 'Брус 150', value: {pitch: 3, pileType: PT.svs76, girderTypes: girderTypes16}},
   {name: 'Брус 200', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes20}},
   {name: 'Бревно', value: {pitch: 3, pileType: PT.svs108, girderTypes: girderTypes20}},
@@ -175,19 +138,6 @@ function handleBuildingMaterialSelect (material) {
   {name: 'Кирпич', value: {pitch: 2, pileType: PT.svs108, girderTypes: bricksBuildingBracing}},
   {name: 'ЛСТК', value: {pitch: 3, pileType: PT.svs89, girderTypes: girderTypes14}}
 ];
-
-/** Materials - Виды материалов для всех типов строений */
-var MT = {
-    bar150: {name: 'Брус 150', value: 'bar150'},
-    bar200: {name: 'Брус 200', value: 'bar200'},
-    woodLog: {name: 'Бревно', value: 'woodLog'},
-    sip: {name: 'Sip-панели', value: 'sip'},
-    framePanel: {name: 'Каркасно-щитовой', value: 'framePanel'},
-    cinder200: {name: 'Газосиликатный блок 200 мм.', value: 'cinder200'},
-    cinder300: {name: 'Газосиликатный блок 300 мм.', value: 'cinder300'},
-    brick: {name: 'Кирпич', value: 'brick'},
-    steel: {name: 'ЛСТК', value: 'steel'}
-}
 
 /** Pile Types - Виды (диаметры) свай, с ценами за штуку и установку. */
 var PT = {
