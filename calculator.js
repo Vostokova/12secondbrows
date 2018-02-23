@@ -150,12 +150,6 @@ var PT = {
     svs108m5l2: {name: 'СВС-76', price: 4200, setUpPrice: 2900}
 };
 
-/** Этажность. */
-var FLOORS = [
-    {name: '1 - 1,5 эт.', value: 'low'},
-    {name: '2 - 3 эт.', value: 'high'}
-];
-
 /** Варианты высоты для ангара. */
 var BARNHEIGHT = [
     {name: 'до 6 м.', value: 'under6'},

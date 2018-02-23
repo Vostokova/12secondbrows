@@ -11,15 +11,21 @@ var MT = {
     steel: {name: 'ЛСТК', value: 'steel'}
 };
 
-/** Data-id - Идентификаторы смысловых блоков на странице */
+/** Идентификаторы смысловых блоков на странице
+ * @prop dataId CSS-селектор data-id для выбора целого блока.
+ * @prop id Идентификатор конкретного элемента формы для получения значения.
+ */
 var ID = {
-    building: 'b3aece',
-    material: '4a029a3',
-    height: 'b288cb3',
-    sizeHeading: 'a29203d',
-    sizeInputs: '56cc477',
-    setUp: 'cbfde2f',
-    calcButton: 'cc044f5'
+    building: {dataId: 'b3a8ece', id: 'building-type'},
+    material: {dataId: '4a029a3', id: 'building-material'},
+    height: {dataId: 'b288cb3', id: 'building-height'},
+    sizeHeading: {dataId: 'a29203d'},
+    sizeInputs: {dataId: '56cc477'},
+    length: {id: 'building-length'},
+    width: {id: 'building-width'},
+    setUp: {dataId: 'cbfde2f', id: 'setting-up'},
+    reset: {dataId: '290ba0e', id: 'reset'},
+    calculator: {dataId: 'cc044f5', id: 'calculator'}
 };
 
 /**
@@ -47,19 +53,33 @@ var ALLMATERIALS = [MT.bar150, MT.bar200, MT.woodLog, MT.sip, MT.framePanel, MT.
 /** Материалы для постройки типа "Беседка". */
 var ARBORMATERIALS = [MT.bar150, MT.bar200, MT.woodLog, MT.sip, MT.framePanel, MT.cinder200, MT.steel];
 
+/** Этажность для постройки типа "Дом". */
+var FLOORS = [
+    {name: '1 - 1,5 эт.', value: 'low'},
+    {name: '2 - 3 эт.', value: 'high'}
+];
+
+/** Этажность для постройки типа "Здание". */
+var BUILDINGFLOORS = [
+    {name: '1 - 1,5 этажа', value: 'under2'},
+    {name: '2 - 3 этажа', value: 'under3'},
+    {name: 'более 3 этажей', value: 'over3'}
+];
+
 
 /**
  * Формулы и функции.
  */
 
-/** Заполнение select-списка опциями.
- * @param selectID Идентификатор списка.
+/**
+ * Заполнение select-списка опциями.
+ * @param key Ключ спискового элемента в объекте ID.
  * @param array Массив с опциями для заполнения.
  * @param [placeholder] Строка для отображения первым элементом списка (неактивным).
  */
-function setOptions(selectID, array, placeholder) {
-    var select = byId(selectID);
-    while (select.options.length > 0) {
+function setOptions(key, array, placeholder) {
+    var select = byId(key);
+    while (select && select.options.length > 0) {
         select.options[0] = null;
     }
 
@@ -75,37 +95,48 @@ function setOptions(selectID, array, placeholder) {
     })
 }
 
-/** Получение HTML-элемента по идентификатору. */
-function byId(id) {
-    return document.getElementById(id);
+/**
+ * Получение HTML-элемента по идентификатору.
+ * @param key Ключ блока, который хотим найти, в объекте ID.
+ */
+function byId(key) {
+    var id = ID[key].id;
+    return id && document.getElementById(id);
 }
 
 /**
  * Получение HTML-элемента (смыслового блока) по идентификатору data-id.
- * @param blockName Ключ блока, который хотим найти, в объекте ID.
+ * @param key Ключ блока, который хотим найти, в объекте ID.
  */
-function byDataId(blockName) {
-    var selector = 'data-id=' + '"' + ID[blockName] + '"';
-    return document.querySelector(selector);
+function byDataId(key) {
+    var dataId = ID[key].dataId;
+    return dataId && document.querySelector('[data-id=' + '"' + dataId + '"]');
 }
 
-/** Получение значения выбранной select-опции по идентификатору селекта. */
-function selected(id) {
-    var dropdown = byId(id);
-    var option = dropdown.selectedIndex;
-    return dropdown.options[option].value;
+/**
+ * Получение значения выбранной select-опции.
+ * @param key Ключ искомого select-элемента в объекте ID.
+ */
+function selected(key) {
+    var dropdown = byId(key);
+    var option = dropdown && dropdown.selectedIndex;
+    return dropdown && dropdown.options[option].value;
 }
 
 /** Инициализация формы калькулятора. Как он выглядит в самом начале. */
-// TODO: прятать все ненужные поля и кнопку 'рассчитать'
 function setInitial() {
-    setOptions('building-type', BUILDINGS, 'Тип строения');
+    var blocks = Object.keys(ID);
+    hideAll(blocks);
+    show('building');
+    setOptions('building', BUILDINGS, 'Тип строения');
 }
 
 /** Обработка выбора типа строения */
 // TODO: написать сценарии для ангара, пирса, ремонта
 function handleBuildingTypeSelect() {
-    var buildingType = selected(this.id);
+    disable('building');
+    show('reset');
+    var buildingType = selected('building');
     switch (buildingType) {
         case 'house':
         case 'bath':
@@ -114,10 +145,12 @@ function handleBuildingTypeSelect() {
         case 'garage':
         case 'shed':
         case 'building':
-            setOptions('building-material', ALLMATERIALS, 'Материал');
+            show('material');
+            setOptions('material', ALLMATERIALS, 'Материал');
             break;
         case 'arbor':
-            setOptions('building-material', ARBORMATERIALS, 'Материал');
+            show('material');
+            setOptions('material', ARBORMATERIALS, 'Материал');
             break;
         // case 'barn':
         // показать поле для выбора формы ангара с вариантами BARNOPTIONS
@@ -129,25 +162,74 @@ function handleBuildingTypeSelect() {
         // показать что-то для замены/ремонта
         // break;
         default:
-            byId('calculator').disabled = true;
+            disable('calculator');
+    }
+}
+
+function handleMaterialSelect() {
+    disable('material');
+    var buildingType = selected('building');
+    switch (buildingType) {
+        case 'house':
+            show('height');
+            setOptions('height', FLOORS);
+            break;
+        case 'building':
+            show('height');
+            setOptions('height', BUILDINGFLOORS);
+            break;
+        default:
+            break;
     }
 }
 
 /**
  * Функция, скрывающая смысловой блок разметки.
- * @param blockName Ключ блока, который хотим скрыть, в объекте ID.
+ * @param key Ключ блока, который хотим скрыть, в объекте ID.
  */
-function hideBlock(blockName) {
-    byDataId(blockName).hidden = true;
+function hideBlock(key) {
+    var block = byDataId(key);
+    if (block) block.hidden = true;
 }
 
 /**
- * Функция, скрывающая все смысловые блоки разметки, кроме Типа строения.
- * @param blockName Ключ блока, который хотим скрыть, в объекте ID.
+ * Функция, скрывающая все блоки разметки, указанные в массиве.
+ * @param blocks Массив, состоящий из ключей блоков, которые хотим скрыть.
  */
-function hideAll() {
-    blocks = [ID.building,ID.building,ID.building,ID.building,ID.building,ID.building,ID.building, ]
-    byDataId(blockName).hidden = true;
+function hideAll(blocks) {
+    blocks.map(function (key) {
+        hideBlock(key);
+    });
+}
+
+/**
+ * Функция, показывающая смысловой блок разметки.
+ * @param key Ключ блока, который хотим показать, в объекте ID.
+ */
+function show(key) {
+    var block = byDataId(key);
+    if (block) {
+        block.hidden = false;
+        enable(key);
+    }
+}
+
+/**
+ * Блокирует доступ и изменение поля формы.
+ * @param key Ключ искомого поля в объекте ID.
+ */
+function disable(key) {
+    var field = byId(key);
+    if (field) field.disabled = true;
+}
+
+/**
+ * Снимает блокировку поля формы.
+ * @param key Ключ искомого поля в объекте ID.
+ */
+function enable(key) {
+    var field = byId(key);
+    if (field) field.disabled = false;
 }
 
 /**
@@ -155,4 +237,6 @@ function hideAll() {
  **/
 
 document.addEventListener('DOMContentLoaded', setInitial);
-byId('building-type').addEventListener('ValueChange', handleBuildingTypeSelect);
+byId('building').addEventListener('ValueChange', handleBuildingTypeSelect);
+byId('material').addEventListener('ValueChange', handleMaterialSelect);
+byId('reset').addEventListener('click', setInitial);
