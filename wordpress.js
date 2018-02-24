@@ -19,11 +19,13 @@ var ID = {
     building: {dataId: 'b3a8ece', id: 'building-type'},
     material: {dataId: '4a029a3', id: 'building-material'},
     height: {dataId: 'b288cb3', id: 'building-height'},
-    sizeHeading: {dataId: 'a29203d'},
+    sizeHeading: {dataId: 'e58ac5e'},
     sizeInputs: {dataId: '56cc477'},
     length: {id: 'building-length'},
     width: {id: 'building-width'},
     setUp: {dataId: 'cbfde2f', id: 'setting-up'},
+    mrrHeading: {dataId: 'a29203d', id: 'mrr-distance'},
+    mrr: {dataId: '3965a8e', id: 'mrr-distance'},
     reset: {dataId: '290ba0e', id: 'reset'},
     calculator: {dataId: 'cc044f5', id: 'calculator'}
 };
@@ -55,8 +57,8 @@ var ARBORMATERIALS = [MT.bar150, MT.bar200, MT.woodLog, MT.sip, MT.framePanel, M
 
 /** Этажность для постройки типа "Дом". */
 var FLOORS = [
-    {name: '1 - 1,5 эт.', value: 'low'},
-    {name: '2 - 3 эт.', value: 'high'}
+    {name: '1 - 1,5 этажа', value: 'low'},
+    {name: '2 - 3 этажа', value: 'high'}
 ];
 
 /** Этажность для постройки типа "Здание". */
@@ -83,11 +85,10 @@ function setOptions(key, array, placeholder) {
         select.options[0] = null;
     }
 
-    if (placeholder) {
-        var defaultOption = new Option (placeholder, '', true, true);
-        defaultOption.disabled = true;
-        select.appendChild (defaultOption);
-    }
+    var defaultOption = new Option (placeholder || '', '', true, true);
+    defaultOption.disabled = true;
+    defaultOption.hidden = true;
+    select.appendChild (defaultOption);
 
     array.map(function(item) {
         var option = new Option (item.name, item.value);
@@ -131,8 +132,8 @@ function setInitial() {
     setOptions('building', BUILDINGS, 'Тип строения');
 }
 
-/** Обработка выбора типа строения */
-// TODO: написать сценарии для ангара, пирса, ремонта
+/** Обработка выбора типа строения. */
+// TODO: написать сценарии для ангара, ремонта
 function handleBuildingTypeSelect() {
     disable('building');
     show('reset');
@@ -155,9 +156,9 @@ function handleBuildingTypeSelect() {
         // case 'barn':
         // показать поле для выбора формы ангара с вариантами BARNOPTIONS
         // break;
-        // case 'pier':
-        // показать инпуты для ввода длины и ширины
-        // break;
+        case 'pier':
+            showSizeBlock();
+            break;
         // case 'groundworks':
         // показать что-то для замены/ремонта
         // break;
@@ -166,28 +167,99 @@ function handleBuildingTypeSelect() {
     }
 }
 
+/** Обработка выбора типа материала. */
+// TODO: написать сценарии для ангара, ремонта
 function handleMaterialSelect() {
     disable('material');
     var buildingType = selected('building');
     switch (buildingType) {
         case 'house':
             show('height');
-            setOptions('height', FLOORS);
+            setOptions('height', FLOORS, 'Этажность');
             break;
         case 'building':
             show('height');
-            setOptions('height', BUILDINGFLOORS);
+            setOptions('height', BUILDINGFLOORS, 'Этажность');
+            break;
+        case 'bath':
+        case 'porch':
+        case 'arbor':
+        case 'decking':
+        case 'garage':
+        case 'shed':
+        case 'pier':
+            showSizeBlock();
+            break;
+        // case 'barn':
+        // показать поле для выбора формы ангара с вариантами BARNOPTIONS
+        // break;
+        // case 'groundworks':
+        // показать что-то для замены/ремонта
+        // break;
+        default:
+            break;
+    }
+}
+
+/** Обработка выбора количества этажей. */
+function handleFloorsSelect() {
+    disable('height');
+    var buildingType = selected('building');
+    switch (buildingType) {
+        case 'house':
+        case 'building':
+            showSizeBlock();
             break;
         default:
             break;
     }
 }
 
+/** Обработка ввода размеров строения. */
+function handleSizeChange() {
+    var length = getNumberValue('length');
+    var width = getNumberValue('width');
+    if (length && width) {
+        show('setUp');
+    } else {
+        hide('setUp');
+    }
+}
+
+function handleSetUpChange() {
+    show('mrrHeading');
+    show('mrr');
+}
+
+function handleMrrChange() {
+    var distance = getNumberValue('mrr');
+    if (distance) {
+        show('calculator');
+    } else {
+        hide('calculator');
+    }
+}
+
+/** Получение float-значения введенного числа по идентификатору инпута. */
+function getNumberValue(key) {
+    return parseFloat(byId(key).value);
+}
+
+/**
+ * Функция, показывающая блок для ввода размеров строения.
+ */
+function showSizeBlock() {
+    show('sizeHeading');
+    show('sizeInputs');
+    enable('length');
+    enable('width');
+}
+
 /**
  * Функция, скрывающая смысловой блок разметки.
  * @param key Ключ блока, который хотим скрыть, в объекте ID.
  */
-function hideBlock(key) {
+function hide(key) {
     var block = byDataId(key);
     if (block) block.hidden = true;
 }
@@ -198,7 +270,7 @@ function hideBlock(key) {
  */
 function hideAll(blocks) {
     blocks.map(function (key) {
-        hideBlock(key);
+        hide(key);
     });
 }
 
@@ -208,10 +280,8 @@ function hideAll(blocks) {
  */
 function show(key) {
     var block = byDataId(key);
-    if (block) {
-        block.hidden = false;
-        enable(key);
-    }
+    if (block) block.hidden = false;
+    if (ID[key].id) enable(key);
 }
 
 /**
@@ -239,4 +309,9 @@ function enable(key) {
 document.addEventListener('DOMContentLoaded', setInitial);
 byId('building').addEventListener('ValueChange', handleBuildingTypeSelect);
 byId('material').addEventListener('ValueChange', handleMaterialSelect);
+byId('height').addEventListener('ValueChange', handleFloorsSelect);
+byId('length').addEventListener('input', handleSizeChange);
+byId('width').addEventListener('input', handleSizeChange);
+byId('setUp').addEventListener('input', handleSetUpChange);
+byId('mrr').addEventListener('input', handleMrrChange);
 byId('reset').addEventListener('click', setInitial);
