@@ -452,3 +452,10 @@ byId('calculator').addEventListener('submit', getTotal);
 //     var nextBlock = byId(nextBlockId);
 //     // в опции передать нужный массив
 // }
+
+
+function checkSelectedValue(value, array) {
+    for (var i = 0; i < array.length; i++) {
+        if (array[i].value = value) return true;
+    }
+}
