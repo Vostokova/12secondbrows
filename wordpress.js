@@ -155,6 +155,9 @@ function setInitial() {
     var blocks = Object.keys(ID);
     hideAll(blocks);
     clearAll(blocks);
+    // document.querySelector('[data-id="6a2ccbf"]').classList.remove('menu-toggle');
+    // document.querySelector('[data-id="6a2ccbf"]').className = document.querySelector('[data-id="6a2ccbf"]').className.replace(/\bmenu-toggle\b/g, '');
+    // document.getElementById('curtain').hidden = true;
     show('building');
     setOptions('building', BUILDINGS, 'Тип строения');
 }
@@ -212,7 +215,6 @@ function handleMaterialSelect() {
         case 'decking':
         case 'garage':
         case 'shed':
-        case 'pier':
             showSizeBlock();
             break;
         // case 'groundworks':
@@ -227,7 +229,9 @@ function handleBarnFormSelect() {
     var selectedForm = checked('barnForm');
     if (!selectedForm) return;
     show('barnHeight');
-    setOptions('barnHeight', BARNHEIGHT, 'Высота');
+    checkSelectedValue(selected('barnHeight'), BARNHEIGHT) ?
+        handleBarnHeightSelect() :
+        setOptions('barnHeight', BARNHEIGHT, 'Высота');
 }
 
 /** Обработка выбора количества этажей. */
@@ -241,6 +245,10 @@ function handleFloorsSelect() {
         default:
             break;
     }
+}
+
+function handleBarnHeightSelect() {
+    //показать галочку с выбором известно или нет расстояние между несущими опорами
 }
 
 /** Обработка ввода размеров строения. */
