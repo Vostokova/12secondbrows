@@ -62,8 +62,8 @@ var ARBORMATERIALS = [MT.bar150, MT.bar200, MT.woodLog, MT.sip, MT.framePanel, M
 
 /** Этажность для постройки типа "Дом". */
 var FLOORS = [
-    {name: '1 - 1,5 этажа', value: 'low'},
-    {name: '2 - 3 этажа', value: 'high'}
+    {name: '1 - 1,5 этажа', value: 'under2'},
+    {name: '2 - 3 этажа', value: 'under3'}
 ];
 
 /** Этажность для постройки типа "Здание". */
@@ -135,7 +135,7 @@ function byDataId(key) {
 function selected(key) {
     var dropdown = byId(key);
     var option = dropdown && dropdown.selectedIndex;
-    return option && dropdown.options[option].value;
+    return (option >= 0) && dropdown.options[option].value;
 }
 
 /**
@@ -155,9 +155,7 @@ function setInitial() {
     var blocks = Object.keys(ID);
     hideAll(blocks);
     clearAll(blocks);
-    // document.querySelector('[data-id="6a2ccbf"]').classList.remove('menu-toggle');
-    // document.querySelector('[data-id="6a2ccbf"]').className = document.querySelector('[data-id="6a2ccbf"]').className.replace(/\bmenu-toggle\b/g, '');
-    // document.getElementById('curtain').hidden = true;
+    document.querySelector('[data-id="6a2ccbf"]').classList.remove('wait-js');
     show('building');
     setOptions('building', BUILDINGS, 'Тип строения');
 }
@@ -176,16 +174,17 @@ function handleBuildingTypeSelect() {
         case 'garage':
         case 'shed':
         case 'building':
-            showMaterial(ALLMATERIALS);
+            showNextSelect('material', ALLMATERIALS, 'Материал', handleMaterialSelect);
             break;
         case 'arbor':
-            showMaterial(ARBORMATERIALS);
+            showNextSelect('material', ARBORMATERIALS, 'Материал', handleMaterialSelect);
             break;
         case 'barn':
             show('barnForm');
             break;
         case 'pier':
             showSizeBlock();
+            handleSizeChange();
             break;
         // case 'groundworks':
         // показать что-то для замены/ремонта
@@ -202,12 +201,10 @@ function handleMaterialSelect() {
     var buildingType = selected('building');
     switch (buildingType) {
         case 'house':
-            show('height');
-            setOptions('height', FLOORS, 'Этажность');
+            showNextSelect('height', FLOORS, 'Этажность', handleFloorsSelect);
             break;
         case 'building':
-            show('height');
-            setOptions('height', BUILDINGFLOORS, 'Этажность');
+            showNextSelect('height', BUILDINGFLOORS, 'Этажность', handleFloorsSelect);
             break;
         case 'bath':
         case 'porch':
@@ -216,6 +213,7 @@ function handleMaterialSelect() {
         case 'garage':
         case 'shed':
             showSizeBlock();
+            handleSizeChange();
             break;
         // case 'groundworks':
         // показать что-то для замены/ремонта
@@ -241,12 +239,14 @@ function handleFloorsSelect() {
         case 'house':
         case 'building':
             showSizeBlock();
+            handleSizeChange();
             break;
         default:
             break;
     }
 }
 
+// TODO показать галочку с выбором известно или нет расстояние между несущими опорами
 function handleBarnHeightSelect() {
     //показать галочку с выбором известно или нет расстояние между несущими опорами
 }
@@ -378,11 +378,37 @@ function checkSelectedValue(value, array) {
     }
 }
 
-function showMaterial(array) {
-    var remainSelected = checkSelectedValue(selected('material'), array);
-    show('material');
-    remainSelected && handleMaterialSelect();
-    !remainSelected && setOptions('material', array, 'Материал');
+function showNextSelect(key, array, placeholder, callback) {
+    var remainSelected = checkSelectedValue(selected(key), array);
+    show(key);
+    remainSelected && callback();
+    !remainSelected && setOptions(key, array, placeholder);
+}
+
+/** Получение общей стоимости заказа. */
+function getTotal(event) {
+    event.preventDefault();
+    var h3 = document.createElement('h3');
+    var total = getPilesAmount() + calcTransportation();
+    h3.innerHTML = 'Сумма: ' + total;
+
+    document.querySelector('[data-id="6a2ccbf"]').appendChild(h3);
+}
+
+/** Расчёт стоимости свай. */
+function getPilesAmount() {
+    var buildingType = selected('building');
+    var material = selected('material');
+    var height = selected('building-height');
+    var pitch = getPitch();
+    var pileType = getPileType();
+
+    return calcPiles(pitch) * (pileType.price + pileType.setUpPrice);
+}
+
+/** Расчёт стоимости транспортировки. */
+function calcTransportation() {
+    return getNumberValue('mrr-distance') * transportationTax;
 }
 
 /**
@@ -399,3 +425,4 @@ byId('width').addEventListener('input', handleSizeChange);
 byDataId('setUp').addEventListener('input', handleSetUpChange);
 byId('mrr').addEventListener('input', handleMrrChange);
 byId('reset').addEventListener('click', setInitial);
+byId('calculator').addEventListener('click', getTotal);

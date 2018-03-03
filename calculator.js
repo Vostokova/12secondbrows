@@ -445,17 +445,3 @@ function setInitial() {
 
 document.addEventListener('DOMContentLoaded', setInitial);
 byId('calculator').addEventListener('submit', getTotal);
-
-// function showNext(event, nextBlockId) {
-//     event.target.hidden = true;
-//     // нарисовать вместо этого другую кнопку
-//     var nextBlock = byId(nextBlockId);
-//     // в опции передать нужный массив
-// }
-
-
-function checkSelectedValue(value, array) {
-    for (var i = 0; i < array.length; i++) {
-        if (array[i].value = value) return true;
-    }
-}
