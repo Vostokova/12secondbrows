@@ -1,16 +1,3 @@
-/** Materials - Виды материалов для всех типов строений */
-var MT = {
-    bar150: {name: 'Брус 150', value: 'bar150'},
-    bar200: {name: 'Брус 200', value: 'bar200'},
-    woodLog: {name: 'Бревно', value: 'woodLog'},
-    sip: {name: 'Sip-панели', value: 'sip'},
-    framePanel: {name: 'Каркасно-щитовой', value: 'framePanel'},
-    cinder200: {name: 'Газосиликатный блок 200 мм.', value: 'cinder200'},
-    cinder300: {name: 'Газосиликатный блок 300 мм.', value: 'cinder300'},
-    brick: {name: 'Кирпич', value: 'brick'},
-    steel: {name: 'ЛСТК', value: 'steel'}
-};
-
 /**
  * Идентификаторы смысловых блоков на странице
  *
@@ -34,6 +21,53 @@ var ID = {
     resume: {dataId: 'cc044f5', id: 'resume'},
     calculator: {dataId: 'd219f7a', id: 'calculator'}
 };
+
+/** Materials - Виды материалов для всех типов строений */
+var MT = {
+    bar150: {name: 'Брус 150', value: 'bar150'},
+    bar200: {name: 'Брус 200', value: 'bar200'},
+    woodLog: {name: 'Бревно', value: 'woodLog'},
+    sip: {name: 'Sip-панели', value: 'panel'},
+    framePanel: {name: 'Каркасно-щитовой', value: 'panel'},
+    cinder200: {name: 'Газосиликатный блок 200 мм.', value: 'cinder200'},
+    cinder300: {name: 'Газосиликатный блок 300 мм.', value: 'cinder300'},
+    brick: {name: 'Кирпич', value: 'brick'},
+    steel: {name: 'ЛСТК', value: 'panel'}
+};
+
+/** Pile Types - Виды (диаметры) свай, с ценами за штуку и установку. */
+var PT = {
+    svs108: {name: 'СВС-108', price: 1650, setUpPrice: 1200},
+    svs133: {name: 'СВС-133', price: 2300, setUpPrice: 1400},
+    svs89: {name: 'СВС-89', price: 1450, setUpPrice: 1100},
+    svs76: {name: 'СВС-76', price: 1250, setUpPrice: 950},
+    svs108m4: {name: 'СВС-76', price: 2500, setUpPrice: 1500},
+    svs108m4l2: {name: 'СВС-76', price: 3500, setUpPrice: 2500},
+    svs108m5l2: {name: 'СВС-76', price: 4200, setUpPrice: 2900}
+};
+
+/** Girder Types - Материалы для обвязки свай по периметру, с ценами за штуку. */
+var GT = {
+    U16: {name: 'Швеллер П16', value: 1200},
+    U18: {name: 'Швеллер П18', value: 1350},
+    U20: {name: 'Швеллер П20', value: 1500},
+    U22: {name: 'Швеллер П22', value: 1600},
+    U24: {name: 'Швеллер П24', value: 1800},
+    U26: {name: 'Швеллер П26', value: 2100},
+    U28: {name: 'Швеллер П28', value: 2300},
+    U30: {name: 'Швеллер П30', value: 2700},
+    T14: {name: 'Двутавр 14', value: 1450},
+    T16: {name: 'Двутавр 16', value: 1650},
+    T18: {name: 'Двутавр 18', value: 1900},
+    T20: {name: 'Двутавр 20', value: 2300},
+    T22: {name: 'Двутавр 22', value: 2550}
+};
+
+var girderTypes14 = [GT.U16, GT.U18, GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T14, GT.T16, GT.T18, GT.T20, GT.T22];
+var girderTypes16 = [GT.U16, GT.U18, GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T16, GT.T18, GT.T20, GT.T22];
+var girderTypes20 = [GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T20, GT.T22];
+var girderTypes30 = [GT.U30];
+
 
 /**
  * Константы для select-опций
@@ -80,6 +114,130 @@ var BARNHEIGHT = [
     {name: 'до 10 м.', value: 'under10'},
     {name: 'более 10 м.', value: 'over10'}
 ];
+
+var buildingMaterialToPilesMap = {
+    house: {
+        under2: {
+            bar150: {pitch: 3, pileType: PT.svs108},
+            bar200: {pitch: 3, pileType: PT.svs108},
+            woodLog: {pitch: 3, pileType: PT.svs108},
+            panel: {pitch: 3, pileType: PT.svs108},
+            cinder200: {pitch: 2, pileType: PT.svs108},
+            cinder300: {pitch: 2, pileType: PT.svs108},
+            brick: {pitch: 2, pileType: PT.svs108}
+        },
+        under3: {
+            bar150: {pitch: 3, pileType: PT.svs108},
+            bar200: {pitch: 2.5, pileType: PT.svs108},
+            woodLog: {pitch: 2, pileType: PT.svs108},
+            panel: {pitch: 2.5, pileType: PT.svs108},
+            cinder200: {pitch: 2, pileType: PT.svs108},
+            cinder300: {pitch: 2, pileType: PT.svs133},
+            brick: {pitch: 2, pileType: PT.svs133}
+        }
+    },
+    // идентично дому
+    bath: {
+        bar150: {pitch: 3, pileType: PT.svs108},
+        bar200: {pitch: 3, pileType: PT.svs108},
+        woodLog: {pitch: 3, pileType: PT.svs108},
+        panel: {pitch: 3, pileType: PT.svs108},
+        cinder200: {pitch: 2, pileType: PT.svs108},
+        cinder300: {pitch: 2, pileType: PT.svs108},
+        brick: {pitch: 2, pileType: PT.svs108}
+    },
+    // шаг идентично дому, везде кроме кирпича и блока300 - свс89
+    porch: {
+        bar150: {pitch: 3, pileType: PT.svs89},
+        bar200: {pitch: 3, pileType: PT.svs89},
+        woodLog: {pitch: 3, pileType: PT.svs89},
+        panel: {pitch: 3, pileType: PT.svs89},
+        cinder200: {pitch: 2, pileType: PT.svs89},
+        cinder300: {pitch: 2, pileType: PT.svs108},
+        brick: {pitch: 2, pileType: PT.svs108}
+    },
+    // шаг тот же, тип свай разный
+    arbor: {
+        bar150: {pitch: 3, pileType: PT.svs89},
+        bar200: {pitch: 3, pileType: PT.svs89},
+        woodLog: {pitch: 3, pileType: PT.svs89},
+        panel: {pitch: 3, pileType: PT.svs76},
+        cinder200: {pitch: 2, pileType: PT.svs108}
+    },
+    // идентично porch
+    decking: {
+        bar150: {pitch: 3, pileType: PT.svs89},
+        bar200: {pitch: 3, pileType: PT.svs89},
+        woodLog: {pitch: 3, pileType: PT.svs89},
+        panel: {pitch: 3, pileType: PT.svs89},
+        cinder200: {pitch: 2, pileType: PT.svs89},
+        cinder300: {pitch: 2, pileType: PT.svs108},
+        brick: {pitch: 2, pileType: PT.svs108}
+    },
+    // идентично дому
+    garage: {
+        bar150: {pitch: 3, pileType: PT.svs108},
+        bar200: {pitch: 3, pileType: PT.svs108},
+        woodLog: {pitch: 3, pileType: PT.svs108},
+        panel: {pitch: 3, pileType: PT.svs108},
+        cinder200: {pitch: 2, pileType: PT.svs108},
+        cinder300: {pitch: 2, pileType: PT.svs108},
+        brick: {pitch: 2, pileType: PT.svs108}
+    },
+    // шаг тот же, тип свай другой
+    shed: {
+        bar150: {pitch: 3, pileType: PT.svs76},
+        bar200: {pitch: 3, pileType: PT.svs108},
+        woodLog: {pitch: 3, pileType: PT.svs108},
+        panel: {pitch: 3, pileType: PT.svs89},
+        cinder200: {pitch: 2, pileType: PT.svs108},
+        cinder300: {pitch: 2, pileType: PT.svs108},
+        brick: {pitch: 2, pileType: PT.svs108}
+    },
+    building: {
+        // шаг и тип свай как у дома для 1 и 2 уровня. Выше 3 этажей иначе
+        under2: {
+            bar150: {pitch: 3, pileType: PT.svs108},
+            bar200: {pitch: 3, pileType: PT.svs108},
+            woodLog: {pitch: 3, pileType: PT.svs108},
+            panel: {pitch: 3, pileType: PT.svs108},
+            cinder200: {pitch: 2, pileType: PT.svs108},
+            cinder300: {pitch: 2, pileType: PT.svs108},
+            brick: {pitch: 2, pileType: PT.svs108}
+        },
+        under3: {
+            bar150: {pitch: 3, pileType: PT.svs108},
+            bar200: {pitch: 2.5, pileType: PT.svs108},
+            woodLog: {pitch: 2, pileType: PT.svs108},
+            panel: {pitch: 2.5, pileType: PT.svs108},
+            cinder200: {pitch: 2, pileType: PT.svs108},
+            cinder300: {pitch: 2, pileType: PT.svs133},
+            brick: {pitch: 2, pileType: PT.svs133}
+        },
+        over3: {
+            bar150: {pitch: 2, pileType: PT.svs108},
+            bar200: {pitch: 2, pileType: PT.svs108},
+            woodLog: {pitch: 1.5, pileType: PT.svs108},
+            panel: {pitch: 2, pileType: PT.svs108},
+            cinder200: {pitch: 1, pileType: PT.svs108},
+            cinder300: {pitch: 1, pileType: PT.svs133},
+            brick: {pitch: 1.5, pileType: PT.svs133}
+        }
+    },
+    barn: {
+        arch: {under6: PT.svs108m4, under8: PT.svs108m4l2, under10: PT.svs108m5l2, over10: PT.svs108m5l2},
+        flat: {under6: PT.svs108m4l2, under8: PT.svs108m4l2, under10: PT.svs108m5l2, over10: PT.svs108m5l2}
+        // в функции подставлять дефолтный шаг 3,
+        // обвязка: металлом/бетонной лентой metal: girderTypes16, band: bricksBuildingBracing
+    },
+    pier: {
+        still: {pitch: 3, pileType: PT.svs76},
+        low: {pitch: 2, pileType: PT.svs89},
+        swift: {pitch: 1.5, pileType: PT.svs108}
+    },
+    groundWorks: {}
+};
+
 
 
 /**
@@ -399,11 +557,60 @@ function getTotal(event) {
 function getPilesAmount() {
     var buildingType = selected('building');
     var material = selected('material');
-    var height = selected('building-height');
-    var pitch = getPitch();
-    var pileType = getPileType();
+    var height = selected('height');
+    var path, pitch, pileType;
+    switch (buildingType) {
+        case 'house':
+        case 'building':
+            path = buildingMaterialToPilesMap[buildingType][height][material];
+            pitch = path.pitch;
+            pileType = path.pileType;
+            break;
+        case 'bath':
+        case 'porch':
+        case 'arbor':
+        case 'decking':
+        case 'garage':
+        case 'shed':
+            path = buildingMaterialToPilesMap[buildingType][material];
+            pitch = path.pitch;
+            pileType = path.pileType;
+            break;
+        case 'barn':
+            pitch = selected('pitch') || 3;
+            pileType = buildingMaterialToPilesMap.barn[selected('barnForm')][selected('barnHeight')];
+            break;
+        case 'pier':
+            path = buildingMaterialToPilesMap.pier[selected('stream')];
+            pitch = path.pitch;
+            pileType = path.pileType;
+            break;
+        // TODO: вариант для ремонта
+    }
 
     return calcPiles(pitch) * (pileType.price + pileType.setUpPrice);
+}
+
+/**
+ * Расчёт количества свай, с учётом максимального шага между ними.
+ * @param pitch Максимальное расстояние между сваями.
+ */
+function calcPiles(pitch) {
+    var length = getNumberValue('length');
+    var width = getNumberValue('width');
+
+    /**
+     * Расчёт количества свай по одной стороне.
+     * @param value Размер стороны (длина или ширина строения).
+     * Прибавляем 1, т.к. в 'точке отсчёта' тоже должна быть свая, значит счёт идёт не от 0.
+     */
+    function calcAspect(value) {
+        var pilesNumber = Math.ceil(value / pitch) + 1;
+        console.log('calcAspect ' + pilesNumber);
+        return pilesNumber;
+    }
+
+    return calcAspect(length) * calcAspect(width);
 }
 
 /** Расчёт стоимости транспортировки. */
