@@ -18,3 +18,5 @@ byId('reset').addEventListener('click', setInitial);
 byId('calculator').addEventListener('click', getTotal);
 byDataId('current').addEventListener('click', handleCurrentSelect);
 byId('depth').addEventListener('input', handleDepthInput);
+byDataId('pierBracing').addEventListener('click', handlePierBracingSelect);
+byId('girderType').addEventListener('ValueChange', handleGirderTypeSelect);

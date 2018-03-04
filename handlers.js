@@ -152,9 +152,11 @@ function handleSizeChange() {
 /** Обработка изменения расстояния от МКАД. */
 function handleMrrChange() {
     var distance = getNumberValue('mrr');
+    var pier = (selected('building') === 'pier');
+
     if (distance) {
-        show('setUp');
-        handleSetUpChange();
+        pier ? show('pierBracing') : show('setUp');
+        pier ? handlePierBracingSelect() : handleSetUpChange();
     } else {
         var blocks = ['setUp', 'resume', 'calculator'];
         hideAll(blocks);
@@ -167,4 +169,26 @@ function handleSetUpChange() {
     if (setUp === undefined) return;
     hide(setUp === 'true' ? 'calculator' :'resume');
     show(setUp === 'true' ? 'resume' : 'calculator');
+}
+
+/** Обработка выбора варианта обвязки пирса. */
+function handlePierBracingSelect() {
+    var bracing = checked('pierBracing');
+    if (!bracing) return;
+    showNextSelect('girderType', girderTypes16, '', handleGirderTypeSelect);
+}
+
+/** Обработка выбора материала для обвязки по периметру. */
+function handleGirderTypeSelect() {
+    if (!selected('girderType')) return;
+    if (
+        selected('building') === 'pier' ||
+        selected('material' === 'brick') ||
+        selected('building' === 'barn' && checked('barnBracing') === 'band')
+    ) {
+        show('calculator');
+    } else {
+        // TODO: предложить обвязку цоколя
+    }
+
 }
