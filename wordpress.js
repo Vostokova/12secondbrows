@@ -4,51 +4,50 @@
 
 /** Получение общей стоимости заказа. */
 function getTotal() {
-    var total = getPilesAmount() + calcTransportation();
+    var buildingType = selected('building');
+    var material = selected('material');
+    var height = selected('height');
+    var distance = getNumberValue('mrr');
+    var total = getPilesAmount(buildingType, material, height) + calcTransportation(distance);
     var text = 'Сумма: ' + total;
     alert(text);
 }
 
-/** Расчёт стоимости свай. */
-function getPilesAmount() {
-    var config = getPilesConfig();
-    return getPilesNumber(config.pitch) * config.price;
-}
-
 /**
- * Получаем шаг и стоимость свай (цена за штуку + установку).
+ * Расчёт стоимости свай.
+ * @param buildingType Тип постройки.
+ * @param material Материал.
+ * @param height Этажность.
  */
-function getPilesConfig() {
-    var buildingType = selected('building');
-    var material = selected('material');
-    var height = selected('height');
-    var path, pitch, pileType;
+function getPilesAmount(buildingType, material, height) {
+    var path, pilesNumber, pileType;
 
     switch (buildingType) {
         case 'house':
         case 'building':
             path = buildingParamsMap[buildingType][height][material];
-            pitch = path.pitch;
+            pilesNumber = getPilesNumber(path.pitch);
             pileType = path.pileType;
             break;
         case 'barn':
-            pitch = byId('defaultPitch').checked ? 3 : getNumberValue('pitch');
+            var pitch = byId('defaultPitch').checked ? 3 : getNumberValue('pitch');
+            pilesNumber = getPilesNumber(pitch);
             pileType = buildingParamsMap[buildingType][checked('barnForm')][selected('barnHeight')];
             break;
         case 'pier':
-            path = buildingParamsMap.pier[selected('stream')];
-            pitch = path.pitch;
+            path = buildingParamsMap.pier[checked('current')];
+            pilesNumber = getPierPilesNumber(path.pitch);
             pileType = path.pileType;
             break;
         // case 'groundWorks': TODO: вариант для ремонта
         default:
             path = buildingParamsMap[buildingType][material];
-            pitch = path.pitch;
+            pilesNumber = getPilesNumber(path.pitch);
             pileType = path.pileType;
             break;
     }
 
-    return {pitch: pitch, price: pileType.price + pileType.setUpPrice};
+    return (pilesNumber * (pileType.price + pileType.setUpPrice));
 }
 
 /**
@@ -71,7 +70,23 @@ function getPilesNumber(pitch) {
     return calcAspect(length) * calcAspect(width);
 }
 
-/** Расчёт стоимости транспортировки. */
-function calcTransportation() {
-    return getNumberValue('mrr') * transportationTax;
+/**
+ * Расчёт количества свай для пирса, с учётом максимального шага между ними.
+ * @param pitch Максимальное расстояние между сваями.
+ */
+function getPierPilesNumber(pitch) {
+    // Свая должна зайти в дно не меньше 1.5 м.
+    var depth = getNumberValue('depth') + 1.5;
+    // Кратность свай - 0,5 м.
+    var pileHeight = Math.ceil(depth / 0.5);
+
+    return getPilesNumber(pitch) * pileHeight;
+}
+
+/**
+ * Расчёт стоимости транспортировки.
+ * @param distance Расстояние от МКАД.
+ */
+function calcTransportation(distance) {
+    return distance * transportationTax;
 }
