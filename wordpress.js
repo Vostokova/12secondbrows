@@ -46,6 +46,7 @@ function getPilesAmount(buildingType, material, height) {
             pileType = path.pileType;
             break;
     }
+    console.log(pilesNumber + ' piles * ' + pileType.price + ' + ' + pileType.setUpPrice);
 
     return (pilesNumber * (pileType.price + pileType.setUpPrice));
 }
@@ -66,6 +67,7 @@ function getPilesNumber(pitch) {
     function calcAspect(value) {
         return Math.ceil(value / pitch) + 1;
     }
+    console.log(calcAspect(length) + ' * ' + calcAspect(width) + ' piles total');
 
     return calcAspect(length) * calcAspect(width);
 }
@@ -79,6 +81,7 @@ function getPierPilesNumber(pitch) {
     var depth = getNumberValue('depth') + 1.5;
     // Кратность свай - 0,5 м.
     var pileHeight = Math.ceil(depth / 0.5);
+    console.log(pileHeight + ' parts in one');
 
     return getPilesNumber(pitch) * pileHeight;
 }
@@ -88,5 +91,6 @@ function getPierPilesNumber(pitch) {
  * @param distance Расстояние от МКАД.
  */
 function calcTransportation(distance) {
+    console.log(distance * transportationTax);
     return distance * transportationTax;
 }
