@@ -144,7 +144,7 @@ function clear(key) {
     }
     for (var i = 0; i < inputs.length; i++) {
         var input = inputs[i];
-        if (input.type === 'radio') input.checked = false;
+        if (input.checked) input.checked = false;
         if (input.type === 'number') input.value = '';
     }
 }
@@ -185,4 +185,3 @@ function showNextSelect(key, options, placeholder, callback) {
     remainSelected && callback();
     !remainSelected && setOptions(key, options, placeholder);
 }
-

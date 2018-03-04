@@ -7,6 +7,7 @@
 function handleBuildingTypeSelect() {
     hideAll(Object.keys(ID));
     show('building');
+    show('reset');
     var buildingType = selected('building');
     switch (buildingType) {
         case 'house':
@@ -39,7 +40,6 @@ function handleBuildingTypeSelect() {
 /** Обработка выбора типа материала. */
 // TODO: написать сценарий для ремонта
 function handleMaterialSelect() {
-    show('reset');
     var buildingType = selected('building');
     switch (buildingType) {
         case 'house':
@@ -65,13 +65,11 @@ function handleMaterialSelect() {
     }
 }
 
+/** Обработка выбора формы ангара. */
 function handleBarnFormSelect() {
     var selectedForm = checked('barnForm');
     if (!selectedForm) return;
-    show('barnHeight');
-    checkSelectedValue(selected('barnHeight'), BARNHEIGHT) ?
-        handleBarnHeightSelect() :
-        setOptions('barnHeight', BARNHEIGHT, 'Высота');
+    showNextSelect('barnHeight', BARNHEIGHT, 'Высота', handleBarnHeightSelect);
 }
 
 /** Обработка выбора количества этажей. */
@@ -88,9 +86,31 @@ function handleFloorsSelect() {
     }
 }
 
-// TODO показать галочку с выбором известно или нет расстояние между несущими опорами
+/** Обработка выбора высоты ангара. */
 function handleBarnHeightSelect() {
-    //показать галочку с выбором известно или нет расстояние между несущими опорами
+    if (!selected('barnHeight')) return;
+    show('barnPitchHeading');
+    show('pitchInputs');
+    handlePitchInput();
+}
+
+/** Обработка ввода известного расстояния между опорами или выбора шага по умолчанию. */
+function handlePitchInput() {
+    if (byId('defaultPitch').checked) {
+        disable('pitch');
+        byId('pitch').value = '';
+        showSizeBlock();
+        handleSizeChange();
+    } else {
+        enable('pitch');
+        if (getNumberValue('pitch')) {
+            showSizeBlock();
+            handleSizeChange();
+        } else {
+            var blocks = ['sizeHeading', 'sizeInputs', 'mrrHeading', 'mrr', 'setUp', 'resume', 'calculator'];
+            hideAll(blocks);
+        }
+    }
 }
 
 /** Обработка ввода размеров строения. */

@@ -32,8 +32,8 @@ function getPilesConfig() {
             pileType = path.pileType;
             break;
         case 'barn':
-            pitch = getNumberValue('pitch') || 3;
-            pileType = buildingParamsMap.barn[selected('barnForm')][selected('barnHeight')];
+            pitch = byId('defaultPitch').checked ? 3 : getNumberValue('pitch');
+            pileType = buildingParamsMap[buildingType][checked('barnForm')][selected('barnHeight')];
             break;
         case 'pier':
             path = buildingParamsMap.pier[selected('stream')];
