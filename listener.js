@@ -16,3 +16,5 @@ byDataId('setUp').addEventListener('input', handleSetUpChange);
 byId('mrr').addEventListener('input', handleMrrChange);
 byId('reset').addEventListener('click', setInitial);
 byId('calculator').addEventListener('click', getTotal);
+byDataId('current').addEventListener('click', handleCurrentSelect);
+byId('depth').addEventListener('input', handleDepthInput);

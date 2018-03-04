@@ -26,8 +26,8 @@ function handleBuildingTypeSelect() {
             show('barnForm');
             break;
         case 'pier':
-            showSizeBlock();
-            handleSizeChange();
+            show('current');
+            handleCurrentSelect();
             break;
         // case 'groundworks':
         // показать что-то для замены/ремонта
@@ -110,6 +110,27 @@ function handlePitchInput() {
             var blocks = ['sizeHeading', 'sizeInputs', 'mrrHeading', 'mrr', 'setUp', 'resume', 'calculator'];
             hideAll(blocks);
         }
+    }
+}
+
+/** Обработка выбора течения в водоёме. */
+function handleCurrentSelect() {
+    var current = checked('current');
+    if (!current) return;
+    show('depthHeading');
+    show('depth');
+    handleDepthInput();
+}
+
+/** Обработка ввода глубины водоёма. */
+function handleDepthInput() {
+    var depth = getNumberValue('depth');
+    if (depth) {
+        showSizeBlock();
+        handleSizeChange();
+    } else {
+        var blocks = ['sizeHeading', 'sizeInputs', 'mrrHeading', 'mrr', 'setUp', 'resume', 'calculator'];
+        hideAll(blocks);
     }
 }
 
