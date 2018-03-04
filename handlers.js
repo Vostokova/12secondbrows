@@ -1,3 +1,7 @@
+/**
+ * Обработчики действий с интерактивными элементами (кнопки, инпуты, селекты).
+ */
+
 /** Обработка выбора типа строения. */
 // TODO: написать сценарий для ремонта
 function handleBuildingTypeSelect() {
@@ -94,33 +98,32 @@ function handleSizeChange() {
     var length = getNumberValue('length');
     var width = getNumberValue('width');
     if (length && width) {
-        show('setUp');
-        handleSetUpChange();
+        show('mrrHeading');
+        show('mrr');
+        handleMrrChange();
     } else {
-        var blocks = ['setUp', 'mrrHeading', 'mrr', 'resume', 'calculator'];
+        var blocks = ['mrrHeading', 'mrr', 'setUp', 'resume', 'calculator'];
         hideAll(blocks);
 
     }
 }
 
-/** Обработка выбора опции 'с монтажом'/'без монтажа'. */
-function handleSetUpChange() {
-    setUp = checked('setUp');
-    if (setUp === undefined) return;
-    show('mrrHeading');
-    show('mrr');
-    handleMrrChange();
-}
-
 /** Обработка изменения расстояния от МКАД. */
 function handleMrrChange() {
     var distance = getNumberValue('mrr');
-    var setUp = checked('setUp');
-    if (setUp === "false") {
-        hide('resume');
-        distance ? show('calculator') : hide('calculator');
+    if (distance) {
+        show('setUp');
+        handleSetUpChange();
     } else {
-        hide('calculator');
-        distance ? show('resume') : hide('resume');
+        var blocks = ['setUp', 'resume', 'calculator'];
+        hideAll(blocks);
     }
+}
+
+/** Обработка выбора опции 'с монтажом'/'без монтажа'. */
+function handleSetUpChange() {
+    var setUp = checked('setUp');
+    if (setUp === undefined) return;
+    hide(setUp === 'true' ? 'calculator' :'resume');
+    show(setUp === 'true' ? 'resume' : 'calculator');
 }
