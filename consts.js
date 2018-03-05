@@ -10,26 +10,33 @@ var ID = {
     height: {dataId: 'b288cb3', id: 'building-height'},
     barnForm: {dataId: '9cc2a25', name: 'barn-form'},
     barnHeight: {dataId: '335033b', id: 'barn-height'},
-    barnPitchHeading: {dataId: 'c3e199a'},
-    pitchInputs: {dataId: '70a7437', name: 'pitch'},
+    pitchHeading: {dataId: 'c3e199a'},
+    pitchInputs: {dataId: '70a7437', name: 'pitch', heading: 'pitchHeading'},
     pitch: {id: 'custom-pitch'},
     defaultPitch: {id: 'default-pitch'},
     current: {dataId: 'ca39e00', name: 'current'},
     depthHeading: {dataId: 'c529950'},
-    depth: {dataId: 'a278673', id: 'depth', name: 'depth'},
+    depth: {dataId: 'a278673', id: 'depth', name: 'depth', heading: 'depthHeading'},
     sizeHeading: {dataId: 'e58ac5e'},
-    sizeInputs: {dataId: '56cc477', name: 'size'},
+    sizeInputs: {dataId: '56cc477', name: 'size', heading: 'sizeHeading'},
     length: {id: 'building-length'},
     width: {id: 'building-width'},
-    setUp: {dataId: '1c16c82', name: 'set-up'},
     mrrHeading: {dataId: 'a29203d', id: 'mrr-distance'},
-    mrr: {dataId: '3965a8e', id: 'mrr-distance', name: 'mrr'},
+    mrr: {dataId: '3965a8e', id: 'mrr-distance', name: 'mrr', heading: 'mrrHeading'},
+    setUp: {dataId: '1c16c82', name: 'set-up'},
+    needBracing: {dataId: '6b92165', name: 'need-bracing'},
+    barnBracing: {dataId: 'c1dc7ac', name: 'barn-bracing'},
     pierBracing: {dataId: '98ca3c6', name: 'pier-bracing'},
     girderType: {dataId: '167bc80', id: 'girder-type'},
+    needPiping: {dataId: 'f4759aa', name: 'need-piping'},
+    pipeType: {dataId: 'e3a41af', id: 'pipe-type'},
     reset: {dataId: '290ba0e', id: 'reset'},
     resume: {dataId: 'cc044f5', id: 'resume'},
     calculator: {dataId: 'd219f7a', id: 'calculator'}
 };
+
+var bracingKeys = ['needBracing', 'pierBracing', 'girderType', 'needPiping', 'pipeType', 'back'];
+var buildingKeysToHide = ['sizeHeading', 'sizeInputs', 'mrrHeading', 'mrr', 'setUp', 'pierBracing', 'girderType', 'resume', 'calculator'];
 
 /** Materials - Виды материалов для всех типов строений */
 var MT = {
@@ -72,10 +79,17 @@ var GT = {
     T22: {name: 'Двутавр 22', value: 2550}
 };
 
-var girderTypes14 = [GT.U16, GT.U18, GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T14, GT.T16, GT.T18, GT.T20, GT.T22];
-var girderTypes16 = [GT.U16, GT.U18, GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T16, GT.T18, GT.T20, GT.T22];
-var girderTypes20 = [GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T20, GT.T22];
-var girderTypes30 = [GT.U30];
+/** Материалы для обвязки свай кирпичного дома, с ценами за материал и установку. */
+var bricksBuildingBracing = [
+    {name: 'Лента 40х40', value: 0.16},
+    {name: 'Лента 40х60', value: 0.24},
+    {name: 'Лента 40х80', value: 0.32},
+    {name: 'Лента 40х100', value: 0.4},
+    {name: 'Лента 50х50', value: 0.25},
+    {name: 'Лента 50х60', value: 0.3},
+    {name: 'Лента 50х80', value: 0.4},
+    {name: 'Лента 50х100', value: 0.5}
+];
 
 /** Цена за транспортировку (руб/км). */
 var transportationTax = 40;

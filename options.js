@@ -43,3 +43,16 @@ var BARNHEIGHT = [
     {name: 'до 10 м.', value: 'under10'},
     {name: 'более 10 м.', value: 'over10'}
 ];
+
+var girderTypes14 = [GT.U16, GT.U18, GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T14, GT.T16, GT.T18, GT.T20, GT.T22];
+var girderTypes16 = [GT.U16, GT.U18, GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T16, GT.T18, GT.T20, GT.T22];
+var girderTypes20 = [GT.U20, GT.U22, GT.U24, GT.U26, GT.U28, GT.U30, GT.T20, GT.T22];
+var girderTypes30 = [GT.U30];
+
+/** Материалы для обвязки цоколя профтрубой, с ценами за штуку. */
+var PIPETYPES = [
+    {name: 'Профтруба 20х30х2', value: 1200},
+    {name: 'Профтруба 20х30х3', value: 1350},
+    {name: 'Профтруба 30х60х2', value: 1500},
+    {name: 'Профтруба 30х60х3', value: 1600}
+];

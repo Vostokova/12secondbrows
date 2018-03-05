@@ -10,30 +10,21 @@ function handleBuildingTypeSelect() {
     show('reset');
     var buildingType = selected('building');
     switch (buildingType) {
-        case 'house':
-        case 'bath':
-        case 'porch':
-        case 'decking':
-        case 'garage':
-        case 'shed':
-        case 'building':
-            showNextSelect('material', ALLMATERIALS, 'Материал', handleMaterialSelect);
-            break;
         case 'arbor':
             showNextSelect('material', ARBORMATERIALS, 'Материал', handleMaterialSelect);
             break;
         case 'barn':
-            show('barnForm');
+            showNext('barnForm', handleBarnFormSelect);
             break;
         case 'pier':
-            show('current');
-            handleCurrentSelect();
+            showNext('current', handleCurrentSelect);
             break;
         // case 'groundworks':
         // показать что-то для замены/ремонта
         // break;
         default:
-            disable('calculator');
+            showNextSelect('material', ALLMATERIALS, 'Материал', handleMaterialSelect);
+            break;
     }
 }
 
@@ -48,19 +39,11 @@ function handleMaterialSelect() {
         case 'building':
             showNextSelect('height', BUILDINGFLOORS, 'Этажность', handleFloorsSelect);
             break;
-        case 'bath':
-        case 'porch':
-        case 'arbor':
-        case 'decking':
-        case 'garage':
-        case 'shed':
-            showSizeBlock();
-            handleSizeChange();
-            break;
         // case 'groundworks':
         // показать что-то для замены/ремонта
         // break;
         default:
+            showNext('sizeInputs', handleSizeChange);
             break;
     }
 }
@@ -74,24 +57,14 @@ function handleBarnFormSelect() {
 
 /** Обработка выбора количества этажей. */
 function handleFloorsSelect() {
-    var buildingType = selected('building');
-    switch (buildingType) {
-        case 'house':
-        case 'building':
-            showSizeBlock();
-            handleSizeChange();
-            break;
-        default:
-            break;
-    }
+    if (!selected(height)) return;
+    showNext('sizeInputs', handleSizeChange);
 }
 
 /** Обработка выбора высоты ангара. */
 function handleBarnHeightSelect() {
     if (!selected('barnHeight')) return;
-    show('barnPitchHeading');
-    show('pitchInputs');
-    handlePitchInput();
+    showNext('pitchInputs', handlePitchInput);
 }
 
 /** Обработка ввода известного расстояния между опорами или выбора шага по умолчанию. */
@@ -99,16 +72,13 @@ function handlePitchInput() {
     if (byId('defaultPitch').checked) {
         disable('pitch');
         byId('pitch').value = '';
-        showSizeBlock();
-        handleSizeChange();
+        showNext('sizeInputs', handleSizeChange);
     } else {
         enable('pitch');
         if (getNumberValue('pitch')) {
-            showSizeBlock();
-            handleSizeChange();
+            showNext('sizeInputs', handleSizeChange);
         } else {
-            var blocks = ['sizeHeading', 'sizeInputs', 'mrrHeading', 'mrr', 'setUp', 'resume', 'calculator'];
-            hideAll(blocks);
+            hideAll(buildingKeysToHide);
         }
     }
 }
@@ -117,20 +87,16 @@ function handlePitchInput() {
 function handleCurrentSelect() {
     var current = checked('current');
     if (!current) return;
-    show('depthHeading');
-    show('depth');
-    handleDepthInput();
+    showNext('depth', handleDepthInput);
 }
 
 /** Обработка ввода глубины водоёма. */
 function handleDepthInput() {
     var depth = getNumberValue('depth');
     if (depth) {
-        showSizeBlock();
-        handleSizeChange();
+        showNext('sizeInputs', handleSizeChange);
     } else {
-        var blocks = ['sizeHeading', 'sizeInputs', 'mrrHeading', 'mrr', 'setUp', 'resume', 'calculator'];
-        hideAll(blocks);
+        hideAll(buildingKeysToHide);
     }
 }
 
@@ -139,13 +105,10 @@ function handleSizeChange() {
     var length = getNumberValue('length');
     var width = getNumberValue('width');
     if (length && width) {
-        show('mrrHeading');
-        show('mrr');
-        handleMrrChange();
+        showNext('mrr', handleMrrChange);
     } else {
-        var blocks = ['mrrHeading', 'mrr', 'setUp', 'resume', 'calculator'];
-        hideAll(blocks);
-
+        hideAll(buildingKeysToHide);
+        show('sizeInputs');
     }
 }
 
@@ -155,10 +118,9 @@ function handleMrrChange() {
     var pier = (selected('building') === 'pier');
 
     if (distance) {
-        pier ? show('pierBracing') : show('setUp');
-        pier ? handlePierBracingSelect() : handleSetUpChange();
+        pier ? showNext('pierBracing', handlePierBracingSelect) : showNext('setUp', handleSetUpChange);
     } else {
-        var blocks = ['setUp', 'resume', 'calculator'];
+        var blocks = ['setUp', 'pierBracing', 'girderType', 'resume', 'calculator'];
         hideAll(blocks);
     }
 }
@@ -171,6 +133,32 @@ function handleSetUpChange() {
     show(setUp === 'true' ? 'resume' : 'calculator');
 }
 
+/** Обработка клика на кнопке 'Продолжить'. */
+function handleResume() {
+    hideAll(Object.keys(ID));
+    (selected('building') === 'barn') ?
+        showNext('barnBracing', handleBarnBracingSelect) :
+        showNext('needBracing', handleNeedBracingChange);
+}
+
+/** Обработка выбора, нужна ли обвязка свай по периметру. */
+function handleNeedBracingChange() {
+    var needBracing = checked('needBracing');
+    if (needBracing === undefined) return;
+    (needBracing === 'true') ?
+        showNextSelect('girderType', getGirderTypes(), '', handleGirderTypeSelect) :
+        showNext('needPiping', handleNeedPipingChange);
+}
+
+/** Обработка выбора варианта обвязки ангара. */
+function handleBarnBracingSelect() {
+    var bracing = checked('barnBracing');
+    if (!bracing) return;
+    if (bracing === 'false') showNext('needBracing', handleNeedBracingChange);
+    var girderTypes = (bracing === 'metal') ? girderTypes16 : bricksBuildingBracing;
+    showNextSelect('girderType', girderTypes, '', handleGirderTypeSelect);
+}
+
 /** Обработка выбора варианта обвязки пирса. */
 function handlePierBracingSelect() {
     var bracing = checked('pierBracing');
@@ -181,14 +169,26 @@ function handlePierBracingSelect() {
 /** Обработка выбора материала для обвязки по периметру. */
 function handleGirderTypeSelect() {
     if (!selected('girderType')) return;
-    if (
+    (
         selected('building') === 'pier' ||
         selected('material' === 'brick') ||
         selected('building' === 'barn' && checked('barnBracing') === 'band')
-    ) {
-        show('calculator');
-    } else {
-        // TODO: предложить обвязку цоколя
-    }
+    ) ?
+        show('calculator') :
+        showNext('needPiping', handleNeedPipingChange);
+}
 
+/** Обработка выбора, нужна ли обвязка свай по периметру. */
+function handleNeedPipingChange() {
+    var needPiping = checked('needPiping');
+    if (needPiping === undefined) return;
+    (needPiping === 'true') ?
+        showNextSelect('pipeType', PIPETYPES, '', handlePipeTypeSelect) :
+        show('calculator');
+}
+
+/** Обработка выбора материала для обвязки цоколя. */
+function handlePipeTypeSelect() {
+    if (!selected('pipeType')) return;
+    if (selected('pipeType')) show('calculator');
 }

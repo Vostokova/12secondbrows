@@ -77,14 +77,6 @@ function getNumberValue(key) {
     return parseFloat(byId(key).value.replace(/,/g, '.'));
 }
 
-/** Функция, показывающая блок для ввода размеров строения. */
-function showSizeBlock() {
-    show('sizeHeading');
-    show('sizeInputs');
-    enable('length');
-    enable('width');
-}
-
 /**
  * Функция, скрывающая смысловой блок разметки.
  * @param key Ключ блока, который хотим скрыть, в объекте ID.
@@ -109,9 +101,10 @@ function hideAll(blocks) {
  * @param key Ключ блока, который хотим показать, в объекте ID.
  */
 function show(key) {
+    ID[key].heading && show(ID[key].heading);
     var block = byDataId(key);
     if (block) block.hidden = false;
-    if (ID[key].id) enable(key);
+    (ID[key].id) && enable(key);
 }
 
 /**
@@ -184,4 +177,31 @@ function showNextSelect(key, options, placeholder, callback) {
     show(key);
     remainSelected && callback();
     !remainSelected && setOptions(key, options, placeholder);
+}
+
+/**
+ * Показывает следующий блок и обрабатывает его значение.
+ * @param key Ключ блока в объекте ID.
+ * @param callback Функция, обрабатывающая значение показанного блока.
+ */
+function showNext(key, callback) {
+    show(key);
+    callback();
+}
+
+/** Возвращает набор материалов для обвязки в зависимости от материала строения. */
+function getGirderTypes() {
+    var material = selected('material');
+    switch (material) {
+        case 'brick':
+            return bricksBuildingBracing;
+        case 'panel':
+            return girderTypes14;
+        case 'cinder300':
+            return girderTypes30;
+        case 'bar150':
+            return girderTypes16;
+        default:
+            return girderTypes20;
+    }
 }
