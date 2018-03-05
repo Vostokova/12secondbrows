@@ -3,18 +3,19 @@
  **/
 
 document.addEventListener('DOMContentLoaded', setInitial);
-byId('building').addEventListener('ValueChange', handleBuildingTypeSelect);
-byId('material').addEventListener('ValueChange', handleMaterialSelect);
+byId('building').addEventListener('input', handleBuildingTypeSelect);
+byId('material').addEventListener('input', handleMaterialSelect);
 byDataId('barnForm').addEventListener('click', handleBarnFormSelect);
-byId('barnHeight').addEventListener('ValueChange', handleBarnHeightSelect);
+byId('barnHeight').addEventListener('input', handleBarnHeightSelect);
 byId('defaultPitch').addEventListener('click', handlePitchInput);
 byId('pitch').addEventListener('input', handlePitchInput);
-byId('height').addEventListener('ValueChange', handleFloorsSelect);
+byId('height').addEventListener('input', handleFloorsSelect);
 byId('length').addEventListener('input', handleSizeChange);
 byId('width').addEventListener('input', handleSizeChange);
-byDataId('setUp').addEventListener('input', handleSetUpChange);
+byDataId('setUp').addEventListener('click', handleSetUpChange);
 byId('mrr').addEventListener('input', handleMrrChange);
 byId('reset').addEventListener('click', setInitial);
+byId('back').addEventListener('click', getBack);
 byId('resume').addEventListener('click', handleResume);
 byId('calculator').addEventListener('click', getTotal);
 byDataId('current').addEventListener('click', handleCurrentSelect);
@@ -23,5 +24,5 @@ byDataId('needBracing').addEventListener('click', handleNeedBracingChange);
 byDataId('pierBracing').addEventListener('click', handlePierBracingSelect);
 byDataId('barnBracing').addEventListener('click', handleBarnBracingSelect);
 byDataId('needPiping').addEventListener('click', handleNeedPipingChange);
-byId('girderType').addEventListener('ValueChange', handleGirderTypeSelect);
-byId('pipeType').addEventListener('ValueChange', handlePipeTypeSelect);
+byId('girderType').addEventListener('input', handleGirderTypeSelect);
+byId('pipeType').addEventListener('input', handlePipeTypeSelect);

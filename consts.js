@@ -30,11 +30,13 @@ var ID = {
     girderType: {dataId: '167bc80', id: 'girder-type'},
     needPiping: {dataId: 'f4759aa', name: 'need-piping'},
     pipeType: {dataId: 'e3a41af', id: 'pipe-type'},
-    reset: {dataId: '290ba0e', id: 'reset'},
+    reset: {dataId: '2bc8858', id: 'reset'},
+    back: {dataId: '9195e5d', id: 'back'},
     resume: {dataId: 'cc044f5', id: 'resume'},
     calculator: {dataId: 'd219f7a', id: 'calculator'}
 };
 
+/** Наборы ключей для скрытия. */
 var bracingKeys = ['needBracing', 'pierBracing', 'girderType', 'needPiping', 'pipeType', 'back'];
 var buildingKeysToHide = ['sizeHeading', 'sizeInputs', 'mrrHeading', 'mrr', 'setUp', 'pierBracing', 'girderType', 'resume', 'calculator'];
 
@@ -64,31 +66,31 @@ var PT = {
 
 /** Girder Types - Материалы для обвязки свай по периметру, с ценами за штуку. */
 var GT = {
-    U16: {name: 'Швеллер П16', value: 1200},
-    U18: {name: 'Швеллер П18', value: 1350},
-    U20: {name: 'Швеллер П20', value: 1500},
-    U22: {name: 'Швеллер П22', value: 1600},
-    U24: {name: 'Швеллер П24', value: 1800},
-    U26: {name: 'Швеллер П26', value: 2100},
-    U28: {name: 'Швеллер П28', value: 2300},
-    U30: {name: 'Швеллер П30', value: 2700},
-    T14: {name: 'Двутавр 14', value: 1450},
-    T16: {name: 'Двутавр 16', value: 1650},
-    T18: {name: 'Двутавр 18', value: 1900},
-    T20: {name: 'Двутавр 20', value: 2300},
-    T22: {name: 'Двутавр 22', value: 2550}
+    U16: {name: 'Швеллер П16', value: '1200'},
+    U18: {name: 'Швеллер П18', value: '1350'},
+    U20: {name: 'Швеллер П20', value: '1500'},
+    U22: {name: 'Швеллер П22', value: '1600'},
+    U24: {name: 'Швеллер П24', value: '1800'},
+    U26: {name: 'Швеллер П26', value: '2100'},
+    U28: {name: 'Швеллер П28', value: '2300'},
+    U30: {name: 'Швеллер П30', value: '2700'},
+    T14: {name: 'Двутавр 14', value: '1450'},
+    T16: {name: 'Двутавр 16', value: '1650'},
+    T18: {name: 'Двутавр 18', value: '1900'},
+    T20: {name: 'Двутавр 20', value: '2300'},
+    T22: {name: 'Двутавр 22', value: '2550'}
 };
 
 /** Материалы для обвязки свай кирпичного дома, с ценами за материал и установку. */
 var bricksBuildingBracing = [
-    {name: 'Лента 40х40', value: 0.16},
-    {name: 'Лента 40х60', value: 0.24},
-    {name: 'Лента 40х80', value: 0.32},
-    {name: 'Лента 40х100', value: 0.4},
-    {name: 'Лента 50х50', value: 0.25},
-    {name: 'Лента 50х60', value: 0.3},
-    {name: 'Лента 50х80', value: 0.4},
-    {name: 'Лента 50х100', value: 0.5}
+    {name: 'Лента 40х40', value: '0.16'},
+    {name: 'Лента 40х60', value: '0.24'},
+    {name: 'Лента 40х80', value: '0.32'},
+    {name: 'Лента 40х100', value: '0.4'},
+    {name: 'Лента 50х50', value: '0.25'},
+    {name: 'Лента 50х60', value: '0.3'},
+    {name: 'Лента 50х80', value: '0.4'},
+    {name: 'Лента 50х100', value: '0.5'}
 ];
 
 /** Цена за транспортировку (руб/км). */

@@ -57,7 +57,7 @@ function handleBarnFormSelect() {
 
 /** Обработка выбора количества этажей. */
 function handleFloorsSelect() {
-    if (!selected(height)) return;
+    if (!selected('height')) return;
     showNext('sizeInputs', handleSizeChange);
 }
 
@@ -154,7 +154,10 @@ function handleNeedBracingChange() {
 function handleBarnBracingSelect() {
     var bracing = checked('barnBracing');
     if (!bracing) return;
-    if (bracing === 'false') showNext('needBracing', handleNeedBracingChange);
+    if (bracing === 'false') {
+        showNext('needPiping', handleNeedPipingChange);
+        return;
+    }
     var girderTypes = (bracing === 'metal') ? girderTypes16 : bricksBuildingBracing;
     showNextSelect('girderType', girderTypes, '', handleGirderTypeSelect);
 }
@@ -180,6 +183,7 @@ function handleGirderTypeSelect() {
 
 /** Обработка выбора, нужна ли обвязка свай по периметру. */
 function handleNeedPipingChange() {
+    hideAll(['pipeType', 'calculator']);
     var needPiping = checked('needPiping');
     if (needPiping === undefined) return;
     (needPiping === 'true') ?
@@ -191,4 +195,9 @@ function handleNeedPipingChange() {
 function handlePipeTypeSelect() {
     if (!selected('pipeType')) return;
     if (selected('pipeType')) show('calculator');
+}
+
+function getBack() {
+    hideAll(bracingKeys);
+    showNext('building', handleBuildingTypeSelect());
 }
