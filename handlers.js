@@ -204,5 +204,5 @@ function handlePipeTypeSelect() {
 
 function getBack() {
     hideAll(bracingKeys);
-    showNext('building', handleBuildingTypeSelect());
+    showNext('building', handleBuildingTypeSelect);
 }

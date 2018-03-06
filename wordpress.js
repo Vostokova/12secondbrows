@@ -7,8 +7,16 @@ function getTotal() {
     var buildingType = selected('building');
     var material = selected('material');
     var height = selected('height');
-    var distance = getNumberValue('mrr');
-    var total = getPilesAmount(buildingType, material, height) + calcTransportation(distance);
+    var length = getNumberValue('length');
+    var width = getNumberValue('width');
+
+    var pilesAmount = getPilesAmount(buildingType, material, height);
+    var transportation = getNumberValue('mrr') * transportationTax;
+    var bracing = needBracing(buildingType) ? getBracingAmount(length, width, parseFloat(selected('girderType'))) : 0;
+    var piping = ((checked('needPiping') === 'true') && (buildingType !== 'pier') && (material !== 'brick')) ?
+        getPipingAmount(length, width, parseFloat(selected('pipeType'))) : 0;
+
+    var total = pilesAmount + transportation + bracing + piping;
     var text = 'Сумма: ' + total;
     alert(text);
 }
@@ -87,10 +95,52 @@ function getPierPilesNumber(pitch) {
 }
 
 /**
- * Расчёт стоимости транспортировки.
- * @param distance Расстояние от МКАД.
+ * Расчёт стоимости обвязки свай по периметру.
+ * @param length Длина строения.
+ * @param width Ширина строения.
+ * @param value Значение выбранного типа обвязки: цена за штуку либо размер бетонной ленты.
  */
-function calcTransportation(distance) {
-    console.log(distance * transportationTax);
-    return distance * transportationTax;
+function getBracingAmount(length, width, value) {
+    var perimeter = (length + width) * 2;
+    var isBand = (selected('material') === 'brick') || (checked('pierBracing') === 'band');
+    if (isBand) {
+        console.log('обвязка лентой ' + value + ' ' + ((bricksBuildingBandPrice + bricksBuildingBracingPrice) * perimeter * value));
+        return (bricksBuildingBandPrice + bricksBuildingBracingPrice) * perimeter * value;
+    } else {
+        // количество балок кратно трём
+        var pieces = Math.ceil(perimeter / 3);
+        console.log('обвязка балкой ' + pieces + ' шт ' + ((value + bracing) * pieces));
+        return (value + bracing) * pieces;
+    }
+}
+
+/**
+ * Выясняем, нужна ли обвязка свай.
+ * @param buildingType Тип строения (т.к. для разных строений разные радио-элементы).
+ */
+function needBracing(buildingType) {
+    switch (buildingType) {
+        case 'pier':
+            return true;
+        case 'barn':
+            var barnBracing = checked('barnBracing');
+            return barnBracing && (barnBracing !== 'false');
+        default:
+            return checked('needBracing');
+    }
+}
+
+/**
+ * Расчёт стоимости обвязки цоколя профтрубой.
+ * @param length Длина цоколя.
+ * @param width Ширина цоколя.
+ * @param pipePrice Цена за профтрубу (за штуку).
+ */
+function getPipingAmount(length, width, pipePrice) {
+    var perimeter = (length + width) * 2;
+    // количество профилирующих труб кратно трём
+    var pieces = Math.ceil(perimeter / 3);
+
+    console.log('обвязка цоколя ' + pieces + ' шт ' + ((pipePrice + piping) * pieces));
+    return (pipePrice + piping) * pieces;
 }
