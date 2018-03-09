@@ -1,124 +1,6 @@
-var BARNBRACING = [
-    {name: 'обвязка металлом', value: 'metal'},
-    {name: 'обвязка бетонной лентой', value: 'band'}
-];
-
-/** Материалы для обвязки цоколя профтрубой, с ценами за штуку. */
-var pipeTypes = [
-    {
-        name: 'Профтруба 20х30х2',
-        value: 1200
-    },
-    {
-        name: 'Профтруба 20х30х3',
-        value: 1350
-    },
-    {
-        name: 'Профтруба 30х60х2',
-        value: 1500
-    },
-    {
-        name: 'Профтруба 30х60х3',
-        value: 1600
-    }
-];
-
-
-/**
- * Константы для формул.
- */
-
-/** Цена доставки (за километр). */
-var transportationTax = 40;
-
-/** Цена за обвязку свай/цоколя (за штуку материала). */
-var bracing = 1000;
-var piping = 1000;
-
-/** Цена ленты для обвязки кирпичного строения (за квадратный метр ленты). */
-var bricksBuildingBinderPrice = 20000;
-/** Цена обвязки кирпичного строения (за квадратный метр ленты). */
-var bricksBuildingBracingPrice = 25000;
-
-
 /**
  * Формулы и функции.
  */
-
- /** Заполнение select-списка опциями.
-  * @param selectID Идентификатор списка.
-  * @param array Массив с опциями для заполнения.
-  * @param [placeholder] Необязательная подсказка/заголовок выпадающего списка.
-  */
- function setOptions(selectID, array, placeholder) {
- 	var select = byId(selectID);
- 	while (select.options.length > 0) {
- 		select.options[0] = null;
- 	};
-
- 	if (placeholder) {
- 		var defaultOption = new Option (placeholder, '', true, true);
- 		defaultOption.disabled = true;
- 		select.appendChild (defaultOption);
- 	}
-
-     array.map(function(item) {
-         var option = new Option (item.name, item.value);
-         select.appendChild(option);
-     })
- }
-
-/** Получение HTML-элемента по идентификатору. */
-function byId(id) {
-    return document.getElementById(id);
-}
-
-/** Получение значения выбранной select-опции по идентификатору селекта. */
-function selected(id) {
-    var dropdown = byId(id);
-    var option = dropdown.selectedIndex;
-    return dropdown.options[option].value;
-}
-
-/** Получение float-значения введенного числа по идентификатору инпута. */
-function getNumberValue(id) {
-    return parseFloat(byId(id).value);
-}
-
-/** Расчёт количества свай, с учётом максимального шага между ними.
- * @param pitch Максимальное расстояние между сваями.
- */
-function calcPiles(pitch) {
-    var length = getNumberValue('building-length');
-    var width = getNumberValue('building-width');
-
-    /** Расчёт количества свай по одной стороне.
-     * @param value Размер стороны (длина или ширина строения).
-     * Прибавляем 1, т.к. в 'точке отсчёта' тоже должна быть свая, значит счёт идёт не от 0.
-     */
-    function calcAspect(value) {
-        var pilesNumber = Math.ceil(value / pitch) + 1;
-        console.log('calcAspect ' + pilesNumber);
-        return pilesNumber;
-    }
-
-    return calcAspect(length) * calcAspect(width);
-}
-
-/** Расчёт стоимости транспортировки. */
-function calcTransportation() {
-    return getNumberValue('mrr-distance') * transportationTax;
-}
-
-/** Расчёт стоимости свай. */
-function getPilesAmount() {
-    var buildingParams = selected('building-material');
-    var height = selected('building-height');
-    var pitch = buildingParams[height].pitch;
-    var pileType = buildingParams[height].pileType;
-
-    return calcPiles(pitch) * (pileType.price + pileType.setUpPrice);
-}
 
 /** Расчёт стоимости дополнительных работ (обвязка свай / обвязка по периметру). */
 function getAdditionalWorksAmount() {
@@ -135,20 +17,13 @@ function getAdditionalWorksAmount() {
         if (houseMaterials[selected('building-material')].name === 'Кирпич') { //TODO: достать значение "кирпич" или что выбор из массива bricksBuildingBracing
            var binderSize = selected('girder-type');
 
-           return (bricksBuildingBinderPrice + bricksBuildingBracingPrice) * perimeter * binderSize;
+           return (bricksBuildingBandPrice + bricksBuildingBracingPrice) * perimeter * binderSize;
 
        } else {
            var girderPrice = selected('girder-type');
            bracingAmount = (girderPrice + bracing) * pieces;
        }
     }
-
-    if (byId('need-piping').checked) {
-        var pipePrice = selected('pipe-type');
-        pipingAmount = (pipePrice + piping) * pieces;
-    }
-
-    return bracingAmount + pipingAmount;
 }
 
 /** Получение общей стоимости заказа. */

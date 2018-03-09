@@ -57,7 +57,7 @@ function handleBarnFormSelect() {
 
 /** Обработка выбора количества этажей. */
 function handleFloorsSelect() {
-    if (!selected(height)) return;
+    if (!selected('height')) return;
     showNext('sizeInputs', handleSizeChange);
 }
 
@@ -139,15 +139,19 @@ function handleResume() {
     (selected('building') === 'barn') ?
         showNext('barnBracing', handleBarnBracingSelect) :
         showNext('needBracing', handleNeedBracingChange);
+    show('back');
 }
 
 /** Обработка выбора, нужна ли обвязка свай по периметру. */
 function handleNeedBracingChange() {
     var needBracing = checked('needBracing');
     if (needBracing === undefined) return;
-    (needBracing === 'true') ?
-        showNextSelect('girderType', getGirderTypes(), '', handleGirderTypeSelect) :
+    if (needBracing === 'true') {
+        showNextSelect('girderType', getGirderTypes(), '', handleGirderTypeSelect);
+    } else {
+        hide('girderType');
         showNext('needPiping', handleNeedPipingChange);
+    }
 }
 
 /** Обработка выбора варианта обвязки ангара. */
@@ -155,6 +159,7 @@ function handleBarnBracingSelect() {
     var bracing = checked('barnBracing');
     if (!bracing) return;
     if (bracing === 'false') {
+        hide('girderType');
         showNext('needPiping', handleNeedPipingChange);
         return;
     }
@@ -174,8 +179,8 @@ function handleGirderTypeSelect() {
     if (!selected('girderType')) return;
     (
         selected('building') === 'pier' ||
-        selected('material' === 'brick') ||
-        selected('building' === 'barn' && checked('barnBracing') === 'band')
+        selected('material') === 'brick' ||
+        selected('building') === 'barn' && checked('barnBracing') === 'band'
     ) ?
         show('calculator') :
         showNext('needPiping', handleNeedPipingChange);
@@ -199,5 +204,5 @@ function handlePipeTypeSelect() {
 
 function getBack() {
     hideAll(bracingKeys);
-    showNext('building', handleBuildingTypeSelect());
+    showNext('building', handleBuildingTypeSelect);
 }

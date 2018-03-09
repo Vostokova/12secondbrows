@@ -36,6 +36,7 @@ var ID = {
     calculator: {dataId: 'd219f7a', id: 'calculator'}
 };
 
+/** Наборы ключей для скрытия. */
 var bracingKeys = ['needBracing', 'pierBracing', 'girderType', 'needPiping', 'pipeType', 'back'];
 var buildingKeysToHide = ['sizeHeading', 'sizeInputs', 'mrrHeading', 'mrr', 'setUp', 'pierBracing', 'girderType', 'resume', 'calculator'];
 
@@ -94,3 +95,12 @@ var bricksBuildingBracing = [
 
 /** Цена за транспортировку (руб/км). */
 var transportationTax = 40;
+
+/** Цена за обвязку свай/цоколя (за штуку материала). */
+var bracing = 1000;
+var piping = 1000;
+
+/** Цена ленты для обвязки кирпичного строения (за квадратный метр ленты). */
+var bricksBuildingBandPrice = 20000;
+/** Цена обвязки кирпичного строения (за квадратный метр ленты). */
+var bricksBuildingBracingPrice = 25000;
