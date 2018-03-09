@@ -9,14 +9,16 @@ function getTotal() {
     var height = selected('height');
     var length = getNumberValue('length');
     var width = getNumberValue('width');
+    var setUp = (checked('setUp') === 'true') || (buildingType === 'pier');
 
-    var pilesAmount = getPilesAmount(buildingType, material, height);
+    var pilesAmount = getPilesAmount(buildingType, material, height, setUp);
     var transportation = getNumberValue('mrr') * transportationTax;
-    var bracing = needBracing(buildingType) ? getBracingAmount(length, width, parseFloat(selected('girderType'))) : 0;
-    var piping = ((checked('needPiping') === 'true') && (buildingType !== 'pier') && (material !== 'brick')) ?
+    var bracing = setUp && needBracing(buildingType) ? getBracingAmount(length, width, parseFloat(selected('girderType'))) : 0;
+    var piping = setUp && ((checked('needPiping') === 'true') && (buildingType !== 'pier') && (material !== 'brick')) ?
         getPipingAmount(length, width, parseFloat(selected('pipeType'))) : 0;
 
     var total = pilesAmount + transportation + bracing + piping;
+    console.log(pilesAmount + ' + ' + transportation + ' + ' + bracing + ' + ' + piping + ' = ' + total);
     var text = 'Сумма: ' + total;
     alert(text);
 }
@@ -27,8 +29,8 @@ function getTotal() {
  * @param material Материал.
  * @param height Этажность.
  */
-function getPilesAmount(buildingType, material, height) {
-    var path, pilesNumber, pileType;
+function getPilesAmount(buildingType, material, height, setUp) {
+    var path, pilesNumber, pileType, setUpPrice;
 
     switch (buildingType) {
         case 'house':
@@ -54,9 +56,10 @@ function getPilesAmount(buildingType, material, height) {
             pileType = path.pileType;
             break;
     }
-    console.log(pilesNumber + ' piles * ' + pileType.price + ' + ' + pileType.setUpPrice);
+    setUpPrice = setUp ? pileType.setUpPrice : 0;
+    console.log(pilesNumber + ' piles * ' + pileType.price + ' + ' + setUpPrice);
 
-    return (pilesNumber * (pileType.price + pileType.setUpPrice));
+    return (pilesNumber * (pileType.price + setUpPrice));
 }
 
 /**
@@ -126,7 +129,7 @@ function needBracing(buildingType) {
             var barnBracing = checked('barnBracing');
             return barnBracing && (barnBracing !== 'false');
         default:
-            return checked('needBracing');
+            return (checked('needBracing') === 'true');
     }
 }
 
