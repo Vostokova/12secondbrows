@@ -107,10 +107,18 @@ var buildingParamsMap = {
         }
     },
     barn: {
-        arch: {under6: PT.svs108m4, under8: PT.svs108m4l2, under10: PT.svs108m5l2, over10: PT.svs108m5l2},
-        flat: {under6: PT.svs108m4l2, under8: PT.svs108m4l2, under10: PT.svs108m5l2, over10: PT.svs108m5l2}
-        // в функции подставлять дефолтный шаг 3,
-        // обвязка: металлом/бетонной лентой metal: girderTypes16, band: bricksBuildingBracing
+        arch: {
+            under6: {pileType: PT.svs108m4},
+            under8: {pileType: PT.svs108m4l2},
+            under10: {pileType: PT.svs108m5l2},
+            over10: {pileType: PT.svs108m5l2}
+        },
+        flat: {
+            under6: {pileType: PT.svs108m4l2},
+            under8: {pileType: PT.svs108m4l2},
+            under10: {pileType: PT.svs108m5l2},
+            over10: {pileType: PT.svs108m5l2}
+        }
     },
     pier: {
         still: {pitch: 3, pileType: PT.svs76},

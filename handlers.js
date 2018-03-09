@@ -5,7 +5,8 @@
 /** Обработка выбора типа строения. */
 // TODO: написать сценарий для ремонта
 function handleBuildingTypeSelect() {
-    hideAll(Object.keys(ID));
+    var blocks = Object.keys(ID);
+    hideAll(blocks);
     show('building');
     show('reset');
     var buildingType = selected('building');
@@ -14,9 +15,11 @@ function handleBuildingTypeSelect() {
             showNextSelect('material', ARBORMATERIALS, 'Материал', handleMaterialSelect);
             break;
         case 'barn':
+            clearAll(blocks.slice(1));
             showNext('barnForm', handleBarnFormSelect);
             break;
         case 'pier':
+            clearAll(blocks.slice(1));
             showNext('current', handleCurrentSelect);
             break;
         // case 'groundworks':
@@ -69,6 +72,7 @@ function handleBarnHeightSelect() {
 
 /** Обработка ввода известного расстояния между опорами или выбора шага по умолчанию. */
 function handlePitchInput() {
+    fillAside();
     if (byId('defaultPitch').checked) {
         disable('pitch');
         byId('pitch').value = '';
@@ -102,6 +106,7 @@ function handleDepthInput() {
 
 /** Обработка ввода размеров строения. */
 function handleSizeChange() {
+    fillAside();
     var length = getNumberValue('length');
     var width = getNumberValue('width');
     if (length && width) {
@@ -110,10 +115,12 @@ function handleSizeChange() {
         hideAll(buildingKeysToHide);
         show('sizeInputs');
     }
+    fillAside();
 }
 
 /** Обработка изменения расстояния от МКАД. */
 function handleMrrChange() {
+    fillAside();
     var distance = getNumberValue('mrr');
     var pier = (selected('building') === 'pier');
 
@@ -127,6 +134,7 @@ function handleMrrChange() {
 
 /** Обработка выбора опции 'с монтажом'/'без монтажа'. */
 function handleSetUpChange() {
+    fillAside();
     var setUp = checked('setUp');
     if (setUp === undefined) return;
     hide(setUp === 'true' ? 'calculator' :'resume');
@@ -135,6 +143,7 @@ function handleSetUpChange() {
 
 /** Обработка клика на кнопке 'Продолжить'. */
 function handleResume() {
+    fillAside();
     hideAll(Object.keys(ID));
     (selected('building') === 'barn') ?
         showNext('barnBracing', handleBarnBracingSelect) :
@@ -144,6 +153,7 @@ function handleResume() {
 
 /** Обработка выбора, нужна ли обвязка свай по периметру. */
 function handleNeedBracingChange() {
+    fillAside();
     var needBracing = checked('needBracing');
     if (needBracing === undefined) return;
     if (needBracing === 'true') {
@@ -156,6 +166,7 @@ function handleNeedBracingChange() {
 
 /** Обработка выбора варианта обвязки ангара. */
 function handleBarnBracingSelect() {
+    fillAside();
     var bracing = checked('barnBracing');
     if (!bracing) return;
     if (bracing === 'false') {
@@ -169,6 +180,7 @@ function handleBarnBracingSelect() {
 
 /** Обработка выбора варианта обвязки пирса. */
 function handlePierBracingSelect() {
+    fillAside();
     var bracing = checked('pierBracing');
     if (!bracing) return;
     showNextSelect('girderType', girderTypes16, '', handleGirderTypeSelect);
@@ -176,6 +188,7 @@ function handlePierBracingSelect() {
 
 /** Обработка выбора материала для обвязки по периметру. */
 function handleGirderTypeSelect() {
+    fillAside();
     if (!selected('girderType')) return;
     (
         selected('building') === 'pier' ||
@@ -188,6 +201,7 @@ function handleGirderTypeSelect() {
 
 /** Обработка выбора, нужна ли обвязка свай по периметру. */
 function handleNeedPipingChange() {
+    fillAside();
     hideAll(['pipeType', 'calculator']);
     var needPiping = checked('needPiping');
     if (needPiping === undefined) return;
@@ -198,11 +212,14 @@ function handleNeedPipingChange() {
 
 /** Обработка выбора материала для обвязки цоколя. */
 function handlePipeTypeSelect() {
+    fillAside();
     if (!selected('pipeType')) return;
     if (selected('pipeType')) show('calculator');
 }
 
+/** Обработка нажатия кнопки "Назад". */
 function getBack() {
+    fillAside();
     hideAll(bracingKeys);
     showNext('building', handleBuildingTypeSelect);
 }

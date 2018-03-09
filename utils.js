@@ -149,7 +149,8 @@ function clear(key) {
 function clearAll(elements) {
     elements.map(function (key) {
         if (ID[key].id || ID[key].name) clear(key);
-    })
+    });
+    fillAside();
 }
 
 /**
@@ -204,4 +205,21 @@ function getGirderTypes() {
         default:
             return girderTypes20;
     }
+}
+
+/** Заполняет указанный текстовый блок значением, полученным из функции. */
+function fill(id, value) {
+    document.getElementById(id).innerHTML = value;
+}
+
+/** Обновляет информацию внутри правого блока. */
+function fillAside() {
+    var params = getPilesParams();
+    fill('piles-number', params && params.pilesNumber || 0);
+    fill('piles-type', params && params.pileType.name || '');
+    fill('pitch', params && params.pitch || '');
+    fill('piles-amount', params && getPilesAmount(params) || 0);
+    fill('setting-up', params && getSetUpPrice(params) || 0);
+    fill('transportation', getTransportation() || 0);
+    fill('total', getTotal() || 0);
 }
