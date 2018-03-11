@@ -91,17 +91,7 @@ function handlePitchInput() {
 function handleCurrentSelect() {
     var current = checked('current');
     if (!current) return;
-    showNext('depth', handleDepthInput);
-}
-
-/** Обработка ввода глубины водоёма. */
-function handleDepthInput() {
-    var depth = getNumberValue('depth');
-    if (depth) {
-        showNext('sizeInputs', handleSizeChange);
-    } else {
-        hideAll(buildingKeysToHide);
-    }
+    showNext('sizeInputs', handleSizeChange);
 }
 
 /** Обработка ввода размеров строения. */
@@ -222,4 +212,26 @@ function getBack() {
     fillAside();
     hideAll(bracingKeys);
     showNext('building', handleBuildingTypeSelect);
+}
+
+/** Обновляет информацию внутри правого блока. */
+function fillAside() {
+    var params = getPilesParams();
+    fill('piles-number', params && params.pilesNumber || 0);
+    fill('piles-type', params && params.pileType.name || '');
+    fill('pitch', params && params.pitch || '');
+    fill('piles-amount', params && getPilesAmount(params) || 0);
+    fill('setting-up', params && getSetUpPrice(params) || 0);
+    fill('transportation', getTransportation() || 0);
+    fill('total', getTotal() || 0);
+}
+
+function handleOrderClick() {
+    var contactForm = byDataId('order');
+    contactForm.hidden = !contactForm.hidden;
+}
+
+function getPdf() {
+    var element = document.querySelector('[data-id="5804305"]');
+    html2pdf(element);
 }

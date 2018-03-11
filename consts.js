@@ -15,8 +15,6 @@ var ID = {
     pitch: {id: 'custom-pitch'},
     defaultPitch: {id: 'default-pitch'},
     current: {dataId: 'ca39e00', name: 'current'},
-    depthHeading: {dataId: 'c529950'},
-    depth: {dataId: 'a278673', id: 'depth', name: 'depth', heading: 'depthHeading'},
     sizeHeading: {dataId: 'e58ac5e'},
     sizeInputs: {dataId: '56cc477', name: 'size', heading: 'sizeHeading'},
     length: {id: 'building-length'},
@@ -33,7 +31,8 @@ var ID = {
     reset: {dataId: '2bc8858', id: 'reset'},
     back: {dataId: '9195e5d', id: 'back'},
     resume: {dataId: 'cc044f5', id: 'resume'},
-    calculator: {dataId: 'd219f7a', id: 'calculator'}
+    calculator: {dataId: 'd219f7a', id: 'calculator'},
+    order: {dataId: '7023f31'}
 };
 
 /** Наборы ключей для скрытия. */

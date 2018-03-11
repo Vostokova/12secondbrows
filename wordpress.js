@@ -11,13 +11,13 @@ function getTotal() {
     var setUp = (checked('setUp') === 'true') || (buildingType === 'pier');
 
     var params = getPilesParams();
-    console.log(getPilesAmount(params) + ' + ' + getSetUpPrice(params));
+    // console.log(getPilesAmount(params) + ' + ' + getSetUpPrice(params));
     var bracing = setUp && needBracing(buildingType) ? getBracingAmount(length, width, parseFloat(selected('girderType'))) : 0;
     var piping = setUp && ((checked('needPiping') === 'true') && (buildingType !== 'pier') && (material !== 'brick')) ?
         getPipingAmount(length, width, parseFloat(selected('pipeType'))) : 0;
 
     var total = params && (getPilesAmount(params) + getSetUpPrice(params) + getTransportation() + bracing + piping);
-    params && console.log(getPilesAmount(params) + getSetUpPrice(params) + ' + ' + getTransportation() + ' + ' + bracing + ' + ' + piping + ' = ' + total);
+    // params && console.log(getPilesAmount(params) + getSetUpPrice(params) + ' + ' + getTransportation() + ' + ' + bracing + ' + ' + piping + ' = ' + total);
     return total;
 }
 
@@ -39,7 +39,7 @@ function getPilesNumber(pitch) {
             return Math.ceil(value / pitch) + 1;
         }
 
-        console.log(calcAspect(length) + ' * ' + calcAspect(width) + ' piles total');
+        // console.log(calcAspect(length) + ' * ' + calcAspect(width) + ' piles total');
 
         return calcAspect(length) * calcAspect(width);
     }
@@ -88,6 +88,7 @@ function getPilesAmount(params) {
 }
 
 function getSetUpPrice(params) {
+    if (!params) return 0;
     var setUp = (checked('setUp') === 'true') || (selected('building') === 'pier');
     return setUp ? (params.pileType.setUpPrice * params.pilesNumber) : 0;
 }
@@ -106,12 +107,12 @@ function getBracingAmount(length, width, value) {
     var perimeter = (length + width) * 2;
     var isBand = (selected('material') === 'brick') || (checked('pierBracing') === 'band');
     if (isBand) {
-        console.log('обвязка лентой ' + value + ' ' + ((bricksBuildingBandPrice + bricksBuildingBracingPrice) * perimeter * value));
+        // console.log('обвязка лентой ' + value + ' ' + ((bricksBuildingBandPrice + bricksBuildingBracingPrice) * perimeter * value));
         return (bricksBuildingBandPrice + bricksBuildingBracingPrice) * perimeter * value;
     } else {
         // количество балок кратно трём
         var pieces = Math.ceil(perimeter / 3);
-        console.log('обвязка балкой ' + pieces + ' шт ' + ((value + bracing) * pieces));
+        // console.log('обвязка балкой ' + pieces + ' шт ' + ((value + bracing) * pieces));
         return (value + bracing) * pieces;
     }
 }
@@ -143,6 +144,6 @@ function getPipingAmount(length, width, pipePrice) {
     // количество профилирующих труб кратно трём
     var pieces = Math.ceil(perimeter / 3);
 
-    console.log('обвязка цоколя ' + pieces + ' шт ' + ((pipePrice + piping) * pieces));
+    // console.log('обвязка цоколя ' + pieces + ' шт ' + ((pipePrice + piping) * pieces));
     return (pipePrice + piping) * pieces;
 }
